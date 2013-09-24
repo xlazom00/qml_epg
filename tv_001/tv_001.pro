@@ -22,4 +22,7 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
-    qml/tv_001/StreamsDataModel.qml
+    tv_00180.png \
+    tv_00164.png \
+    tv_001.desktop \
+    tv_001_harmattan.desktop
