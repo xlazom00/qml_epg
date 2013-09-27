@@ -13,14 +13,40 @@ Item {
     Image {
         id: background
         anchors.fill: parent
-        source: "background.jpg"
+        source: "images/background.jpg"
     }
+
+    FontLoader {
+        id: neakyfont;
+        source: "fonts/DnCeBd__.ttf"
+        onStatusChanged: {
+            console.log("status:" + neakyfont.status);
+        }
+    }
+
+//    Text {
+//        text: "Fancy font"
+//        font.family: neakyfont.name
+//        font.pixelSize: 40
+//        color: "Red"
+//    }
+
+//    Text {
+//        y:50
+//        text: "Fancy font"
+////        font.family: neakyfont.name
+//        font.pixelSize: 40
+//        color: "Red"
+//    }
+
+
 
     Clock {
         x: 92*_scaleFactor; y:44*_scaleFactor
         width: 10
         height: 22
         timerFontSize:24*_scaleFactor
+        fontFamily : neakyfont.name
     }
 
     Component {
@@ -67,24 +93,74 @@ Item {
 
     Component {
         id : epgLineDelegate
-        Row {
-            Text {
+        Item {
+            property real selectedFontHeight : 40 * _scaleFactor
+            property real fontHeight : 20 * _scaleFactor
+//            color : "Green"
+//            width : root.width
+            width : 1024 * root._scaleFactor
+//            height: 50
+            height: titleTime.height;
+            id : epgLineDelegateRoot
 
+            Text {
+                anchors.left : parent.left
+                anchors.leftMargin: 50* root._scaleFactor
+                width: 90 * root._scaleFactor
+                horizontalAlignment : Text.AlignRight
+                id : titleTime
+//                font.bold : true
+//                font.bold: epgLineDelegateRoot.ListView.isCurrentItem
+                font.pointSize: fontHeight
+//                color: epgLineDelegateRoot.ListView.isCurrentItem ? "black" : "white"
+                color : "white"
+                text : startTime
+
+                states: State {
+                    name: "Current"
+                    when: epgLineDelegateRoot.ListView.isCurrentItem
+                    PropertyChanges { target: titleTime; font.pointSize: selectedFontHeight }
+                }
+                transitions: Transition {
+                    NumberAnimation { properties: "font.pointSize"; duration: 200 }
+                }
+            }
+
+            Rectangle {
+                visible: epgLineDelegateRoot.ListView.isCurrentItem
+                color : "blue"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -4
+//                layer.enabled : true
+                anchors.left : parent.left
+                anchors.leftMargin: 145 * root._scaleFactor
+//                anchors.top: parent.top
+//                anchors.topMargin: 5
+//                width : 16
+//                height: 16
+                width : children.width
+                height: children.height
+                SelectTriangle{
+                }
             }
 
             Text {
+                anchors.left : parent.left
+                anchors.leftMargin: 170 * root._scaleFactor
+                width : epgLineDelegateRoot.width - titleTime.width
+                horizontalAlignment : Text.AlignLeft
                 id : titleText
-                font.bold: titleText.ListView.isCurrentItem
-                font.pointSize: 30 * _scaleFactor
-
-                color: titleText.ListView.isCurrentItem ? "black" : "white"
+                font.pointSize: fontHeight
+//                font.bold : true
+//                color: epgLineDelegateRoot.ListView.isCurrentItem ? "black" : "white"
+                color : "white"
 
                 text: title
 
                 states: State {
                     name: "Current"
-                    when: titleText.ListView.isCurrentItem
-                    PropertyChanges { target: titleText; font.pointSize: 36 * _scaleFactor }
+                    when: epgLineDelegateRoot.ListView.isCurrentItem
+                    PropertyChanges { target: titleText; font.pointSize: selectedFontHeight }
                 }
                 transitions: Transition {
                     NumberAnimation { properties: "font.pointSize"; duration: 200 }
@@ -93,28 +169,53 @@ Item {
         }
     }
 
-    Component{
+    Component {
         id: epgDelegate
         Column {
             id : epgDelegateColumn
             height: ListView.view.height
+            spacing : 10
             // TODO : fix width to proper value
             width : root.width
-//            Text {
-//                id: name
-//                text: "index:"+ index + " title:" + title
-//                color: "Red"
-//                font.pixelSize: 30
-//                font.bold: true
-//            }
+//                        Text {
+//                            id: name
+//                            text: "index:"+ index + " title:" + title + " img:" + epgData.get(epgCurrentProgamDelegate.currentIndex).img
+//                            color: "Red"
+//                            font.pixelSize: 30
+//                            font.bold: true
+//                        }
+            Image {
+//                id : titleImage
+                BusyIndicator {
+                    anchors.centerIn: parent;
+                    on: parent.status != Image.Ready
+                }
+                anchors.left: parent.left
+                anchors.leftMargin: 173
+                source : (epgCurrentProgamDelegate.currentIndex!=-1)?epgData.get(epgCurrentProgamDelegate.currentIndex).img:""
+                width : 320
+                height: 180
+                asynchronous : true
+                fillMode: Image.PreserveAspectCrop
+//                states: State {
+//                    name: "Current"
+//                    when: epgLineDelegateRoot.ListView.isCurrentItem
+//                    PropertyChanges { target: titleText; font.pointSize: selectedFontHeight }
+//                }
+//                transitions: Transition {
+//                    NumberAnimation { properties: "font.pointSize"; duration: 200 }
+//                }
+            }
+
 
             ListView {
+                cacheBuffer : 128
+                clip : true
                 id : epgCurrentProgamDelegate
                 orientation : ListView.Vertical
                 width: parent.width
                 height: parent.height
-                spacing: 0
-//                model : EPGDataModel{}
+                spacing: 15
                 model : epgData
                 delegate: epgLineDelegate
                 highlightFollowsCurrentItem: true
@@ -123,29 +224,29 @@ Item {
                 preferredHighlightBegin: 0 * _scaleFactor
                 preferredHighlightEnd: 0 * _scaleFactor
 
-                                            Rectangle{
-                                                color: "Red"
-                                                y:parent.preferredHighlightBegin ; x:0
-                                                height: 1; width: parent.width
-                                            }
+//                Rectangle{
+//                    color: "Red"
+//                    y:parent.preferredHighlightBegin ; x:0
+//                    height: 1; width: parent.width
+//                }
 
-                                            Rectangle{
-                                                color: "Red"
-                                                y:parent.preferredHighlightEnd ; x:0
-                                                height: 1; width: parent.width
-                                            }
+//                Rectangle{
+//                    color: "Red"
+//                    y:parent.preferredHighlightEnd ; x:0
+//                    height: 1; width: parent.width
+//                }
 
                 highlightMoveDuration: 400;
                 highlightResizeDuration: 200;
                 highlightMoveVelocity: 200;
 
             }
-            Component.onCompleted: {
-                console.log("epgDelegateColumn: " + epgDelegateColumn.width + " " + epgDelegateColumn.height);
-                console.log("ListView.view.height"+ ListView.view.height + " ListView.view.width:" + ListView.view.width)
-                //                    currentIndex = 0
-                //                    positionViewAtIndex(0, ListView.SnapPosition)
-            }
+//            Component.onCompleted: {
+//                console.log("epgDelegateColumn: " + epgDelegateColumn.width + " " + epgDelegateColumn.height);
+//                console.log("ListView.view.height"+ ListView.view.height + " ListView.view.width:" + ListView.view.width)
+//                //                    currentIndex = 0
+//                //                    positionViewAtIndex(0, ListView.SnapPosition)
+//            }
         }
     }
 
@@ -173,20 +274,20 @@ Item {
             delegate: streamDelegate
             highlightFollowsCurrentItem: true
             spacing: 10 * _scaleFactor
-            cacheBuffer: 50
+            cacheBuffer: 128
             clip:true
 
-            //                        Rectangle{
-            //                            color: "Green"
-            //                            x:parent.preferredHighlightBegin ; y:0
-            //                            height: parent.height; width: 1
-            //                        }
+//                                    Rectangle{
+//                                        color: "Green"
+//                                        x:parent.preferredHighlightBegin ; y:0
+//                                        height: parent.height; width: 1
+//                                    }
 
-            //                        Rectangle{
-            //                            color: "Green"
-            //                            x:parent.preferredHighlightEnd ; y:0
-            //                            height: parent.height; width: 1
-            //                        }
+//                                    Rectangle{
+//                                        color: "Green"
+//                                        x:parent.preferredHighlightEnd ; y:0
+//                                        height: parent.height; width: 1
+//                                    }
 
 
             //            Component.onCompleted: {
@@ -204,17 +305,19 @@ Item {
             model: StreamsDataModel {}
             anchors.right: parent.right
             anchors.left: parent.left
-            height: 300
+            anchors.leftMargin: -210.0 * root._scaleFactor
+            height: 515
             orientation : ListView.Horizontal
-            cacheBuffer: 10
+            cacheBuffer: 0
             clip:true
             spacing : 0
             delegate: epgDelegate
 
             highlightFollowsCurrentItem: true
             highlightRangeMode : ListView.ApplyRange
-            preferredHighlightBegin: 212 * _scaleFactor
-            preferredHighlightEnd: 212 * _scaleFactor
+            preferredHighlightBegin: 250 * _scaleFactor
+            preferredHighlightEnd: 250 * _scaleFactor
+
 
             highlightMoveDuration: 400;
             highlightResizeDuration: 200;
@@ -244,13 +347,16 @@ Item {
 
 
 
-        epgList.currentItem.children[0].decrementCurrentIndex();
+        epgList.currentItem.children[1].decrementCurrentIndex();
+//        epgList.currentItem.children[0].decrementCurrentIndex();
+        event.accepted = true;
     }
 
     Keys.onDownPressed: {
         //            console.log("listview items:", epgList.currentItem.children[1].currentIndex, epgList.currentItem.children[1].count)
 
-        epgList.currentItem.children[0].incrementCurrentIndex();
+        epgList.currentItem.children[1].incrementCurrentIndex();
+        event.accepted = true;
     }
 
     Keys.onRightPressed: {

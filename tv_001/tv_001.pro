@@ -25,6 +25,5 @@ OTHER_FILES += \
     tv_00180.png \
     tv_00164.png \
     tv_001.desktop \
-    tv_001_harmattan.desktop \
-    qml/tv_001/batmandarkknightrises.jpg \
-    qml/tv_001/batmandarkknight.jpg
+    tv_001_harmattan.desktop
+
