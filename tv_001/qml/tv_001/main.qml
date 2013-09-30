@@ -24,23 +24,6 @@ Item {
         }
     }
 
-//    Text {
-//        text: "Fancy font"
-//        font.family: neakyfont.name
-//        font.pixelSize: 40
-//        color: "Red"
-//    }
-
-//    Text {
-//        y:50
-//        text: "Fancy font"
-////        font.family: neakyfont.name
-//        font.pixelSize: 40
-//        color: "Red"
-//    }
-
-
-
     Clock {
         x: 92*_scaleFactor; y:44*_scaleFactor
         width: 10
@@ -52,6 +35,7 @@ Item {
     Component {
         id: streamDelegate
         Item {
+//            color : "Red"
             id : wrapper
             height: 100
             //            height: ListView.view.height
@@ -253,8 +237,8 @@ Item {
     Column
     {
         anchors.fill: parent
-        anchors.topMargin: 50
-        spacing: 0
+        anchors.topMargin: 60
+        spacing: 10
 
         ListView {
             id: streamList
