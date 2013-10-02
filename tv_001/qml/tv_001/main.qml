@@ -5,6 +5,7 @@ Item {
     property real _scaleFactor: root.width/1280;
     property int emptyItemsBegin: 4;
     property int emptyItemsEnd: 10;
+    property color transparentBlack : "#7F000000"
 
     id: root
     width: 1280
@@ -17,7 +18,15 @@ Item {
     }
 
     FontLoader {
-        id: neakyfont;
+        id: normalFont;
+        source: "fonts/DnCeRg__.ttf"
+        onStatusChanged: {
+            console.log("status:" + neakyfont.status);
+        }
+    }
+
+    FontLoader {
+        id: boldFont;
         source: "fonts/DnCeBd__.ttf"
         onStatusChanged: {
             console.log("status:" + neakyfont.status);
@@ -25,11 +34,12 @@ Item {
     }
 
     Clock {
-        x: 92*_scaleFactor; y:44*_scaleFactor
-        width: 10
-        height: 22
-        timerFontSize:24*_scaleFactor
-        fontFamily : neakyfont.name
+        x: 92*_scaleFactor;
+        y:(44.0  + 20.0)*_scaleFactor
+        width: 10*_scaleFactor
+        height: 22*_scaleFactor
+        timerFontSize:30*_scaleFactor
+        fontFamily : boldFont.name
     }
 
     Component {
@@ -37,18 +47,27 @@ Item {
         Item {
 //            color : "Red"
             id : wrapper
-            height: 100
+            height: 70*_scaleFactor
             //            height: ListView.view.height
             width: rectangle1.width
 
             Rectangle {
                 anchors.centerIn: parent
                 id: rectangle1
-                height: tabText.height + 2*5;
-                width: tabText.width + 2*24;
+                height : 56.0 * _scaleFactor;
+                width: tabText.width + 2*(20.0 * _scaleFactor);
 
                 visible: title!="empty"
-                color: wrapper.ListView.isCurrentItem ? "white" : "black"
+                color: wrapper.ListView.isCurrentItem ? "white" : transparentBlack
+
+                states: State {
+                    name: "Current"
+                    when: wrapper.ListView.isCurrentItem
+                    PropertyChanges { target: rectangle1; height: 70.0 * _scaleFactor }
+                }
+                transitions: Transition {
+                    NumberAnimation { properties: "height"; duration: 200 }
+                }
 
                 Text {
                     verticalAlignment: Text.AlignVCenter
@@ -56,20 +75,18 @@ Item {
                     color: wrapper.ListView.isCurrentItem ? "black" : "white"
                     text: title
                     smooth: true
-                    font.pointSize: 30 * _scaleFactor
+                    font.family: boldFont.name
+                    font.pointSize: 28.0 * _scaleFactor
 
                     states: State {
                         name: "Current"
                         when: wrapper.ListView.isCurrentItem
-                        PropertyChanges { target: tabText; font.pointSize: 36 * _scaleFactor }
+                        PropertyChanges { target: tabText; font.pointSize: 28.0 * _scaleFactor * 1.5 }
                     }
                     transitions: Transition {
                         NumberAnimation { properties: "font.pointSize"; duration: 200 }
                     }
-
-
                     anchors.centerIn: parent
-                    font.bold: true
                 }
             }
         }
@@ -78,8 +95,8 @@ Item {
     Component {
         id : epgLineDelegate
         Item {
-            property real selectedFontHeight : 40 * _scaleFactor
-            property real fontHeight : 20 * _scaleFactor
+            property real selectedFontHeight : 42 * _scaleFactor
+            property real fontHeight : selectedFontHeight * 0.5
 //            color : "Green"
 //            width : root.width
             width : 1024 * root._scaleFactor
@@ -93,10 +110,9 @@ Item {
                 width: 90 * root._scaleFactor
                 horizontalAlignment : Text.AlignRight
                 id : titleTime
-//                font.bold : true
-//                font.bold: epgLineDelegateRoot.ListView.isCurrentItem
                 font.pointSize: fontHeight
-//                color: epgLineDelegateRoot.ListView.isCurrentItem ? "black" : "white"
+                font.family: boldFont.name
+
                 color : "white"
                 text : startTime
 
@@ -114,10 +130,10 @@ Item {
                 visible: epgLineDelegateRoot.ListView.isCurrentItem
                 color : "blue"
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -4
+                anchors.verticalCenterOffset: -4 *_scaleFactor
 //                layer.enabled : true
                 anchors.left : parent.left
-                anchors.leftMargin: 145 * root._scaleFactor
+                anchors.leftMargin: 150 * root._scaleFactor
 //                anchors.top: parent.top
 //                anchors.topMargin: 5
 //                width : 16
@@ -135,8 +151,7 @@ Item {
                 horizontalAlignment : Text.AlignLeft
                 id : titleText
                 font.pointSize: fontHeight
-//                font.bold : true
-//                color: epgLineDelegateRoot.ListView.isCurrentItem ? "black" : "white"
+                font.family: boldFont.name
                 color : "white"
 
                 text: title
@@ -147,7 +162,7 @@ Item {
                     PropertyChanges { target: titleText; font.pointSize: selectedFontHeight }
                 }
                 transitions: Transition {
-                    NumberAnimation { properties: "font.pointSize"; duration: 200 }
+                    NumberAnimation { properties: "font.pointSize"; duration: 100 }
                 }
             }
         }
@@ -158,7 +173,7 @@ Item {
         Column {
             id : epgDelegateColumn
             height: ListView.view.height
-            spacing : 10
+            spacing : 10*_scaleFactor
             // TODO : fix width to proper value
             width : root.width
 //                        Text {
@@ -175,10 +190,10 @@ Item {
                     on: parent.status != Image.Ready
                 }
                 anchors.left: parent.left
-                anchors.leftMargin: 173
+                anchors.leftMargin: 173*_scaleFactor
                 source : (epgCurrentProgamDelegate.currentIndex!=-1)?epgData.get(epgCurrentProgamDelegate.currentIndex).img:""
-                width : 320
-                height: 180
+                width : 320 *_scaleFactor
+                height: 180 *_scaleFactor
                 asynchronous : true
                 fillMode: Image.PreserveAspectCrop
 //                states: State {
@@ -199,7 +214,7 @@ Item {
                 orientation : ListView.Vertical
                 width: parent.width
                 height: parent.height
-                spacing: 15
+                spacing: 15 *_scaleFactor
                 model : epgData
                 delegate: epgLineDelegate
                 highlightFollowsCurrentItem: true
@@ -220,7 +235,7 @@ Item {
 //                    height: 1; width: parent.width
 //                }
 
-                highlightMoveDuration: 400;
+                highlightMoveDuration: 300;
                 highlightResizeDuration: 200;
                 highlightMoveVelocity: 200;
 
@@ -237,12 +252,12 @@ Item {
     Column
     {
         anchors.fill: parent
-        anchors.topMargin: 60
-        spacing: 10
+        anchors.topMargin: (84 + 20) *_scaleFactor
+        spacing: 10 *_scaleFactor
 
         ListView {
             id: streamList
-            height: 100
+            height: 70 *_scaleFactor
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.topMargin: 0*_scaleFactor;
@@ -290,7 +305,7 @@ Item {
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.leftMargin: -210.0 * root._scaleFactor
-            height: 515
+            height: 515 *_scaleFactor
             orientation : ListView.Horizontal
             cacheBuffer: 0
             clip:true
@@ -323,46 +338,53 @@ Item {
     }
 
     focus: true;
-    Keys.onUpPressed: {
+//    Keys.onPressed: {
+//        console.log("Key Pres" + event.key);
+//        event.accepted = true;
+//    }
+
+    function epgUp()
+    {
         //            console.log("listview items:", epgList.currentItem.children[1].currentIndex, epgList.currentItem.children[1].count)
 
-        //            for (var i = 0; i < epgList.currentItem.children.length; i++)
-        //                        console.log("child:", i, epgList.currentItem.children[i])
+        if(epgList.currentItem.children[1].currentIndex  !== 0)
+        {
+            epgList.currentItem.children[1].currentIndex--;
+        }
 
+        //        epgList.currentItem.children[1].decrementCurrentIndex();
 
-
-        epgList.currentItem.children[1].decrementCurrentIndex();
-//        epgList.currentItem.children[0].decrementCurrentIndex();
-        event.accepted = true;
+        //        epgList.currentItem.children[0].decrementCurrentIndex();
     }
-
-    Keys.onDownPressed: {
+    function epgDown() {
         //            console.log("listview items:", epgList.currentItem.children[1].currentIndex, epgList.currentItem.children[1].count)
 
-        epgList.currentItem.children[1].incrementCurrentIndex();
-        event.accepted = true;
+//        epgList.currentItem.children[1].incrementCurrentIndex();
+        if(epgList.currentItem.children[1].currentIndex  !== epgList.currentItem.children[1].count-1)
+        {
+            epgList.currentItem.children[1].currentIndex++;
+        }
+    }
+    function changeChannelPlus() {
+        //        console.log("currentIndex:" + streamList.currentIndex + " count:"+streamList.count + " flicking:" + streamList.flicking + " moving:"+ streamList.moving);
+                if(streamList.currentIndex === streamList.count-1-emptyItemsEnd)
+                {
+
+                    streamList.currentIndex = emptyItemsBegin;
+                    streamList.positionViewAtIndex(emptyItemsBegin, ListView.SnapPosition)
+                    epgList.currentIndex = emptyItemsBegin;
+                    epgList.positionViewAtIndex(emptyItemsBegin, ListView.SnapPosition)
+                }
+                else
+                {
+                    streamList.incrementCurrentIndex()
+                    epgList.incrementCurrentIndex()
+                }
     }
 
-    Keys.onRightPressed: {
-        console.log("currentIndex:" + streamList.currentIndex + " count:"+streamList.count + " flicking:" + streamList.flicking + " moving:"+ streamList.moving);
-        if(streamList.currentIndex == streamList.count-1-emptyItemsEnd)
-        {
-
-            streamList.currentIndex = emptyItemsBegin;
-            streamList.positionViewAtIndex(emptyItemsBegin, ListView.SnapPosition)
-            epgList.currentIndex = emptyItemsBegin;
-            epgList.positionViewAtIndex(emptyItemsBegin, ListView.SnapPosition)
-        }
-        else
-        {
-            streamList.incrementCurrentIndex()
-            epgList.incrementCurrentIndex()
-        }
-        event.accepted = true;
-    }
-    Keys.onLeftPressed: {
-        console.log("currentIndex:" + streamList.currentIndex + " count:"+streamList.count + " flicking:" + streamList.flicking + " moving:"+ streamList.moving);
-        if(streamList.currentIndex == emptyItemsBegin)
+    function changeChannelMinus() {
+        //        console.log("currentIndex:" + streamList.currentIndex + " count:"+streamList.count + " flicking:" + streamList.flicking + " moving:"+ streamList.moving);
+        if(streamList.currentIndex === emptyItemsBegin)
         {
             streamList.currentIndex = streamList.count-1-emptyItemsEnd;
             streamList.positionViewAtIndex(streamList.count-1-emptyItemsEnd, ListView.SnapPosition)
@@ -375,7 +397,38 @@ Item {
             streamList.decrementCurrentIndex()
             epgList.decrementCurrentIndex()
         }
+    }
+
+    Keys.onUpPressed: {
+        epgUp()
         event.accepted = true;
+    }
+
+    Keys.onDownPressed: {
+        epgDown()
+        event.accepted = true;
+    }
+
+    Keys.onRightPressed: {
+        changeChannelPlus()
+        event.accepted = true;
+    }
+    Keys.onLeftPressed: {
+        changeChannelMinus()
+        event.accepted = true;
+    }
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_PageUp) {
+            changeChannelPlus()
+            event.accepted = true;
+            return;
+        }
+        if (event.key === Qt.Key_PageDown) {
+            changeChannelMinus()
+            event.accepted = true;
+            return;
+        }
     }
 
 

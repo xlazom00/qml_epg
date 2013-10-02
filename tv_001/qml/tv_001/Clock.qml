@@ -9,8 +9,8 @@ Item {
     Text {
         anchors.centerIn: parent
         text: root.now
-        font.pointSize: timerFontSize
-        font.bold: true
+        font.pixelSize: timerFontSize
+//        font.bold: true
         font.family: fontFamily
         color: "white"
     }

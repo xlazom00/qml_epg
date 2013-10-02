@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Canvas {
     property color color: "white"
-    width: 16
+    width: 8
     height: 16
     id : canvas
     onPaint:{
