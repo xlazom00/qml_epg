@@ -2,20 +2,20 @@ import QtQuick 2.0
 
 ListModel {
     id: streamData
-    ListElement {
-        title: "empty0"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "images/ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty1"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "images/ct1.jpg"
-        epgData: [
-        ]
-    }
+//    ListElement {
+//        title: "empty0"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "images/ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty1"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "images/ct1.jpg"
+//        epgData: [
+//        ]
+//    }
     ListElement {
         title: "CT1"
         stream: "http://192.168.1.89:3000/T-8395-273-257"
@@ -284,7 +284,7 @@ ListModel {
         ]
     }
     ListElement {
-        title: "ČT Sport"
+        title: "ČT3"
         stream: "http://192.168.1.89:3000/T-8395-273-260"
         logoUri: "images/ctsport.jpg"
         epgData: [
@@ -478,7 +478,7 @@ ListModel {
         ]
     }
     ListElement {
-        title: "ČT 24"
+        title: "ČT4 24"
         stream: "http://192.168.1.89:3000/T-8395-273-259"
         logoUri: "ct24.jpg"
         epgData: [
@@ -672,7 +672,7 @@ ListModel {
         ]
     }
     ListElement {
-        title: "CT1"
+        title: "CT51"
         stream: "http://192.168.1.89:3000/T-8395-273-257"
         logoUri: "ct1.jpg"
         epgData: [
@@ -889,7 +889,7 @@ ListModel {
         ]
     }
     ListElement {
-        title: "ČT2"
+        title: "ČT62"
         stream: "http://192.168.1.89:3000/T-8395-273-258"
         logoUri: "ct2.jpg"
         epgData: [
@@ -1111,60 +1111,60 @@ ListModel {
         epgData: [
         ]
     }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
-    ListElement {
-        title: "empty"
-        stream: "http://192.168.1.89:3000/T-8395-273-257"
-        logoUri: "ct1.jpg"
-        epgData: [
-        ]
-    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
+//    ListElement {
+//        title: "empty"
+//        stream: "http://192.168.1.89:3000/T-8395-273-257"
+//        logoUri: "ct1.jpg"
+//        epgData: [
+//        ]
+//    }
 }

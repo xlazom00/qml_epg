@@ -7,8 +7,8 @@ int main(int argc, char *argv[])
 
     QtQuick2ApplicationViewer viewer;
     viewer.setMainQmlFile(QStringLiteral("qml/tv_001/main.qml"));
-//    viewer.showExpanded();
-    viewer.showFullScreen();
+    viewer.showExpanded();
+//    viewer.showFullScreen();
 
     return app.exec();
 }
