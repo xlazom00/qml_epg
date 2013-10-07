@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTime>
 #include <QSharedPointer>
+#include <QSqlDatabase>
 
 
 class Event
@@ -47,8 +48,6 @@ private:
 typedef QSharedPointer<Channel> SChannel;
 
 
-
-
 class EpgLoader : public QObject
 {
     Q_OBJECT
@@ -60,6 +59,12 @@ signals:
 
 public slots:
     void loadEpgFile();
+
+private:
+    // DB
+    void createTables();
+    bool openDB(QSqlDatabase & db);
+    void closeDB(QSqlDatabase & db);
 
 private:
     void process_line(const QString & line);
@@ -82,6 +87,8 @@ private:
     SEvent currentEvent;
 
     QList<SChannel> m_ChannelList;
+
+    QSqlDatabase db;
 };
 
 

@@ -1,5 +1,7 @@
 #include <QtDebug>
 #include <QFile>
+#include <QSqlQuery>
+
 
 #include "epgloader.h"
 
@@ -8,14 +10,53 @@ EpgLoader::EpgLoader(QObject *parent) :
 {
 }
 
+void EpgLoader::createTables()
+{
+    QSqlQuery query(db);
+    bool err;
+    err = query.exec("create table stream (id int primary key, "
+               "name TEXT)");
+    qDebug() << err;
+    err = query.exec("create table event (id int primary key, "
+               "startime int, "
+               "duration int, "
+               "title TEXT, "
+               "shorttext TEXT, "
+               "description TEXT, "
+               "FOREIGN KEY(streamid) REFERENCES stream(id))"
+               );
+    qDebug() << err;
+}
+
+bool EpgLoader::openDB(QSqlDatabase & db)
+{
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("app.sqlite");
+    // Open databasee
+    return db.open();
+}
+
+void EpgLoader::closeDB(QSqlDatabase & db)
+{
+    db.close();
+}
 
 void EpgLoader::loadEpgFile()
 {
     qDebug(Q_FUNC_INFO);
 
+    if(!openDB(db))
+    {
+        return;
+    }
+    createTables();
+
     QFile file("../data/epg.data");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        closeDB(db);
         return;
+    }
 
     QTextStream in(&file);
     in.setCodec("UTF-8");
@@ -26,6 +67,8 @@ void EpgLoader::loadEpgFile()
     }
 
     file.close();
+
+    closeDB(db);
 }
 
 

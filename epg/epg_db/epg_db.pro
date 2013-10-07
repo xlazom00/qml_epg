@@ -10,6 +10,7 @@ QML_IMPORT_PATH =
 # lines and add the respective components to the MOBILITY variable.
 # CONFIG += mobility
 # MOBILITY +=
+QT += sql
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
