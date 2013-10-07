@@ -135,11 +135,12 @@ void EpgLoader::process_event(const QString & line)
     QStringRef durationTime = line.midRef( startSeparatorIndex, nextSeparatorIndex - startSeparatorIndex);
 
 
+//    time_t
     int idAsInt = id.toInt();
     long startTimeAsLong = startTime.toLong();
     int durationAsInt = durationTime.toInt();
 
-
+//    currentEvent = new Event(idAsInt, QTime())
 
 }
 
