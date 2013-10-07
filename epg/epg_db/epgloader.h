@@ -16,11 +16,12 @@ public:
     void Title(const QStringRef & text);
     void ShortText(const QStringRef & text);
     void Description(const QStringRef & text);
+    void InsertToDB(QSqlDatabase & db, int streamId);
 
 private:
     quint32 m_Id;
-    long m_startTime; // as time_t
-    int m_Duration; //in sec
+    qint64 m_startTime; // as time_t
+    qint32 m_Duration; //in sec
 
     QString m_Title;
     QString m_ShortText;
@@ -36,10 +37,16 @@ public:
 
 public:
     void AddEvent(SEvent & event);
+    void InsertToDB(QSqlDatabase & db);
+    int GetSqlId() const
+    {
+        return m_SQLid;
+    }
 
 private:
-    QString mId;
-    QString mName;
+    QString m_Id;
+    QString m_Name;
+    int m_SQLid;
 
     QList<SEvent> m_EventList;
 
@@ -63,8 +70,8 @@ public slots:
 private:
     // DB
     void createTables();
-    bool openDB(QSqlDatabase & db);
-    void closeDB(QSqlDatabase & db);
+    bool openDB(QSqlDatabase & m_Db);
+    void closeDB(QSqlDatabase & m_Db);
 
 private:
     void process_line(const QString & line);
@@ -88,7 +95,7 @@ private:
 
     QList<SChannel> m_ChannelList;
 
-    QSqlDatabase db;
+    QSqlDatabase m_Db;
 };
 
 

@@ -1,6 +1,7 @@
 #include <QtDebug>
 #include <QFile>
 #include <QSqlQuery>
+#include <QSqlError>
 
 
 #include "epgloader.h"
@@ -12,20 +13,26 @@ EpgLoader::EpgLoader(QObject *parent) :
 
 void EpgLoader::createTables()
 {
-    QSqlQuery query(db);
-    bool err;
-    err = query.exec("create table stream (id int primary key, "
+    QSqlQuery query(m_Db);
+    bool ok;
+    ok = query.exec("create table stream (id INTEGER primary key, "
                "name TEXT)");
-    qDebug() << err;
-    err = query.exec("create table event (id int primary key, "
+    qDebug() << ok;
+    ok = query.exec("create table event (id INTEGER primary key, "
                "startime int, "
                "duration int, "
                "title TEXT, "
                "shorttext TEXT, "
                "description TEXT, "
+               "streamid INTEGER, "
                "FOREIGN KEY(streamid) REFERENCES stream(id))"
                );
-    qDebug() << err;
+    qDebug() << ok;
+    if(!ok)
+    {
+        qDebug() << query.lastError().text();
+    }
+
 }
 
 bool EpgLoader::openDB(QSqlDatabase & db)
@@ -45,16 +52,18 @@ void EpgLoader::loadEpgFile()
 {
     qDebug(Q_FUNC_INFO);
 
-    if(!openDB(db))
+    if(!openDB(m_Db))
     {
         return;
     }
-    createTables();
+//    createTables();
+//    closeDB(db);
+//    return;
 
     QFile file("../data/epg.data");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        closeDB(db);
+        closeDB(m_Db);
         return;
     }
 
@@ -68,7 +77,7 @@ void EpgLoader::loadEpgFile()
 
     file.close();
 
-    closeDB(db);
+    closeDB(m_Db);
 }
 
 
@@ -163,6 +172,7 @@ void EpgLoader::process_channel(const QString & line)
 
     currentChannel = SChannel(new Channel(channelId, channelName));
     m_ChannelList.append(currentChannel);
+    currentChannel->InsertToDB(m_Db);
 }
 
 void EpgLoader::process_channel_end()
@@ -196,12 +206,12 @@ void EpgLoader::process_event(const QString & line)
 
 void EpgLoader::procces_event_end()
 {
-
+    currentEvent->InsertToDB(m_Db, currentChannel->GetSqlId());
 }
 
 
 Channel::Channel(const QString & id, const QString & name) :
-    mId(id), mName(name)
+    m_Id(id), m_Name(name)
 {
 }
 
@@ -209,6 +219,26 @@ void Channel::AddEvent(SEvent & event)
 {
     m_EventList.append(event);
 }
+
+void Channel::InsertToDB(QSqlDatabase & db)
+{
+    QSqlQuery query(db);
+    bool ok;
+    // INSERT INTO stream(name) VALUES("PRIMA")
+    query.prepare("INSERT INTO stream(name) VALUES(:name)");
+    query.bindValue(":name", m_Name);
+    ok = query.exec();
+//    qDebug() << ok;
+    if(!ok)
+    {
+        qDebug() << query.lastError().text();
+    }
+    else
+    {
+        m_SQLid = query.lastInsertId().Int;
+    }
+}
+
 
 
 Event::Event(const quint32 id, long startTime, long durationTime) :
@@ -230,6 +260,39 @@ void Event::ShortText(const QStringRef & text)
 void Event::Description(const QStringRef & text)
 {
     m_Description = text.toString();
+}
+
+void Event::InsertToDB(QSqlDatabase & db, int streamId)
+{
+//    ok = query.exec("create table event (id INTEGER primary key, "
+//               "startime int, "
+//               "duration int, "
+//               "title TEXT, "
+//               "shorttext TEXT, "
+//               "description TEXT, "
+//               "streamid INTEGER, "
+//               "FOREIGN KEY(streamid) REFERENCES stream(id))"
+//               );
+
+    QSqlQuery query(db);
+    bool ok;
+    query.prepare("INSERT INTO event(startime, duration, title, shorttext, description, streamid) VALUES(:startime, :duration, :title, :shorttext, :description, :streamid)");
+    query.bindValue(":startime", m_startTime);
+    query.bindValue(":duration", m_Duration);
+    query.bindValue(":title", m_Title);
+    query.bindValue(":shorttext", m_ShortText);
+    query.bindValue(":description", m_Description);
+    query.bindValue(":streamid", streamId);
+    ok = query.exec();
+//    qDebug() << ok;
+    if(!ok)
+    {
+        qDebug() << query.lastError().text();
+    }
+    else
+    {
+//        m_SQLid = query.lastInsertId().Int;
+    }
 }
 
 
