@@ -3,9 +3,51 @@
 
 #include <QObject>
 #include <QTime>
+#include <QSharedPointer>
 
-class Channel;
-class Event;
+
+class Event
+{
+public:
+    explicit Event(const quint32 id, long startTime, long durationTime);
+
+public:
+    void Title(const QStringRef & text);
+    void ShortText(const QStringRef & text);
+    void Description(const QStringRef & text);
+
+private:
+    quint32 m_Id;
+    long m_startTime; // as time_t
+    int m_Duration; //in sec
+
+    QString m_Title;
+    QString m_ShortText;
+    QString m_Description;
+};
+
+typedef QSharedPointer<Event> SEvent;
+
+class Channel
+{
+public:
+    explicit Channel(const QString & id, const QString & name);
+
+public:
+    void AddEvent(SEvent & event);
+
+private:
+    QString mId;
+    QString mName;
+
+    QList<SEvent> m_EventList;
+
+};
+
+typedef QSharedPointer<Channel> SChannel;
+
+
+
 
 class EpgLoader : public QObject
 {
@@ -36,38 +78,14 @@ private:
     void process_vps(const QString & line);
 
 private:
-    Channel * currentChannel;
-    Event * currentEvent;
+    SChannel currentChannel;
+    SEvent currentEvent;
+
+    QList<SChannel> m_ChannelList;
 };
 
 
-class Channel : public QObject
-{
-    Q_OBJECT
-public:
-    explicit Channel(const QString & id, const QString & name, QObject *parent = 0);
 
-private:
-    QString mId;
-    QString mName;
-};
-
-
-class Event : public QObject
-{
-    Q_OBJECT
-public:
-    explicit Event(const quint32 id, const QTime & name, QObject *parent = 0);
-
-private:
-    quint32 mId;
-    QTime mStartTime;
-    QTime mDuration;
-
-    QString mTitle;
-    QString mShortText;
-    QString mDescription;
-};
 
 
 

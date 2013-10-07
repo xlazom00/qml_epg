@@ -18,11 +18,14 @@ void EpgLoader::loadEpgFile()
         return;
 
     QTextStream in(&file);
+    in.setCodec("UTF-8");
 
     while (!in.atEnd()) {
         QString line = in.readLine();
         process_line(line);
     }
+
+    file.close();
 }
 
 
@@ -72,35 +75,38 @@ void EpgLoader::process_line(const QString & line)
 
 void EpgLoader::process_title(const QString & line)
 {
-
+    QStringRef title = line.rightRef(line.length()-2);
+    currentEvent->Title(title);
 }
 
 void EpgLoader::process_short_text(const QString & line)
 {
-
+    QStringRef shortText = line.rightRef(line.length()-2);
+    currentEvent->ShortText(shortText);
 }
 
 void EpgLoader::process_description(const QString & line)
 {
-
+    QStringRef processDescription = line.rightRef(line.length()-2);
+    currentEvent->Description(processDescription);
 }
 
-void EpgLoader::process_genre(const QString & line)
+void EpgLoader::process_genre(const QString & /*line*/)
 {
 
 }
 
-void EpgLoader::process_rating(const QString & line)
+void EpgLoader::process_rating(const QString & /*line*/)
 {
 
 }
 
-void EpgLoader::process_stream_type(const QString & line)
+void EpgLoader::process_stream_type(const QString & /*line*/)
 {
 
 }
 
-void EpgLoader::process_vps(const QString & line)
+void EpgLoader::process_vps(const QString & /*line*/)
 {
 
 }
@@ -112,12 +118,13 @@ void EpgLoader::process_channel(const QString & line)
     QString channelId(line.mid(2, nextSeparatorIndex-2));
     QString channelName(line.mid( nextSeparatorIndex+1+2, line.length()-(nextSeparatorIndex+2)));
 
-    currentChannel = new Channel(channelId, channelName, this);
+    currentChannel = SChannel(new Channel(channelId, channelName));
+    m_ChannelList.append(currentChannel);
 }
 
 void EpgLoader::process_channel_end()
 {
-    currentChannel = NULL;
+    currentChannel.clear();
 }
 
 void EpgLoader::process_event(const QString & line)
@@ -135,13 +142,13 @@ void EpgLoader::process_event(const QString & line)
     QStringRef durationTime = line.midRef( startSeparatorIndex, nextSeparatorIndex - startSeparatorIndex);
 
 
-//    time_t
     int idAsInt = id.toInt();
     long startTimeAsLong = startTime.toLong();
     int durationAsInt = durationTime.toInt();
 
-//    currentEvent = new Event(idAsInt, QTime())
+    currentEvent = SEvent(new Event(idAsInt, startTimeAsLong, durationAsInt));
 
+    currentChannel->AddEvent(currentEvent);
 }
 
 void EpgLoader::procces_event_end()
@@ -150,10 +157,36 @@ void EpgLoader::procces_event_end()
 }
 
 
-
-Channel::Channel(const QString & id, const QString & name, QObject *parent) :
-    QObject(parent), mId(id), mName(name)
+Channel::Channel(const QString & id, const QString & name) :
+    mId(id), mName(name)
 {
+}
+
+void Channel::AddEvent(SEvent & event)
+{
+    m_EventList.append(event);
+}
+
+
+Event::Event(const quint32 id, long startTime, long durationTime) :
+    m_Id(id), m_startTime(startTime), m_Duration(durationTime)
+{
+
+}
+
+void Event::Title(const QStringRef & text)
+{
+    m_Title = text.toString();
+}
+
+void Event::ShortText(const QStringRef & text)
+{
+    m_ShortText = text.toString();
+}
+
+void Event::Description(const QStringRef & text)
+{
+    m_Description = text.toString();
 }
 
 
