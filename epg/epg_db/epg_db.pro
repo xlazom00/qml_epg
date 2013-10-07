@@ -24,3 +24,6 @@ qtcAddDeployment()
 
 HEADERS += \
     epgloader.h
+
+OTHER_FILES += \
+    ../data/epg.data
