@@ -56,7 +56,7 @@ void EpgLoader::loadEpgFile()
     {
         return;
     }
-//    createTables();
+    createTables();
 //    closeDB(db);
 //    return;
 
