@@ -15,7 +15,10 @@ QT += sql
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    sqlquerymodel.cpp
+    sqlquerymodel.cpp \
+    qlsqltablemodel.cpp \
+    streamlistmodel.cpp \
+    stream.cpp
 
 # Installation path
 # target.path =
@@ -25,4 +28,7 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    sqlquerymodel.h
+    sqlquerymodel.h \
+    qlsqltablemodel.h \
+    streamlistmodel.h \
+    stream.h
