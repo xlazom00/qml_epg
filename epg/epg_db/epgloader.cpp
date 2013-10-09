@@ -236,7 +236,7 @@ void Channel::InsertToDB(QSqlDatabase & db)
     else
     {
         m_SQLid = query.lastInsertId().toInt();
-        qDebug() << "channel:" << m_Name << " " << m_SQLid;
+//        qDebug() << "channel:" << m_Name << " " << m_SQLid;
     }
 }
 
@@ -285,7 +285,7 @@ void Event::InsertToDB(QSqlDatabase & db, int streamId)
     query.bindValue(":description", m_Description);
     query.bindValue(":streamid", streamId);
     ok = query.exec();
-    qDebug() << "event:" << m_Title << " channel:" << streamId;
+//    qDebug() << "event:" << m_Title << " channel:" << streamId;
     if(!ok)
     {
         qDebug() << query.lastError().text();

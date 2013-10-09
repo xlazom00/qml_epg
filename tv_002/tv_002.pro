@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     sqlquerymodel.cpp \
     qlsqltablemodel.cpp \
     streamlistmodel.cpp \
-    stream.cpp
+    autobus.cpp \
+    tvstream.cpp
 
 # Installation path
 # target.path =
@@ -31,4 +32,8 @@ HEADERS += \
     sqlquerymodel.h \
     qlsqltablemodel.h \
     streamlistmodel.h \
-    stream.h
+    autobus.h \
+    tvstream.h
+
+OTHER_FILES += \
+    data/app.sqlite

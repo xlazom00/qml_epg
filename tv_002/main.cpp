@@ -4,9 +4,15 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QtQuick>
+
+//#include <QDeclarativeComponent>
+
 #include "qtquick2applicationviewer.h"
 
 #include "qlsqltablemodel.h"
+#include "tvstream.h"
+#include "autobus.h"
 
 
 void CreateTables(QSqlDatabase & db)
@@ -33,42 +39,55 @@ void CreateTables(QSqlDatabase & db)
 
 }
 
-void GenerateStreamModels(QSqlDatabase & db,  QList<QObject*> & models)
+void GenerateStreamModels(QSqlDatabase & db,  QList< QObject*> & models)
+//void GenerateStreamModels(QSqlDatabase & db,  QList< Autobus *> & models)
 {
-    QLSqlTableModel * model = new QLSqlTableModel(NULL, db);
-    model->setTable("stream");
-    model->generateRoleNames();
-    model->select();
-    int streamCount = model->rowCount();
+    QLSqlTableModel * streamModel = new QLSqlTableModel(NULL, db);
+    streamModel->setTable("stream");
+    streamModel->generateRoleNames();
+    streamModel->select();
+    int streamCount = streamModel->rowCount();
 
     for(int rowIndex=0; rowIndex< streamCount; ++rowIndex)
     {
-        QVariant data = model->data(model->index(rowIndex,0));
-        qDebug() << data.toInt();
-        QLSqlTableModel * model = new QLSqlTableModel(NULL, db);
-        model->setTable("event");
-        model->generateRoleNames();
-        model->setFilter("streamid=" + data.toInt());
-        model->select();
+        QVariant data = streamModel->data(streamModel->index(rowIndex,0));
+        QVariant name = streamModel->data(streamModel->index(rowIndex,1));
+//        qDebug() << data.toInt();
+        QLSqlTableModel * eventModel = new QLSqlTableModel(NULL, db );
+        eventModel->setTable("event");
+        eventModel->generateRoleNames();
+        eventModel->setFilter(QString("streamid=%1").arg(data.toInt()));
+        eventModel->select();
 
-        models.append(model);
+//        qDebug() << "name:" << name.toString() << ":" << eventModel->columnCount();
+//        QString filter = QString("streamid=%1").arg(data.toInt());
+//        qDebug() << "name:" << name.toString() << ":" << filter;
+
+//        models.append(new DataObject());
+//        models.append( new DataObject(name.toString()));
+        models.append( new TvStream( name.toString(), eventModel ) );
     }
-    delete model;
+    delete streamModel;
 }
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    qmlRegisterType<QLSqlTableModel>();
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("c:\\QtWork\\qml_epg\\tv_002\\data\\app.sqlite");
+    db.setDatabaseName("app.sqlite");
+//    db.setDatabaseName("c:\\QtWork\\qml_epg\\tv_002\\data\\app.sqlite");
     bool ret = db.open();
     qDebug() << "db open" << ret;
+
 //    CreateTables(db);
 //    db.close();
 
     QList<QObject*> streamList;
     GenerateStreamModels(db, streamList);
+    qDebug() << "itemcount:" << streamList.count();
 
 //    QLSqlTableModel * model = new QLSqlTableModel(NULL, db);
 //    model->setTable("event");
@@ -79,10 +98,11 @@ int main(int argc, char *argv[])
 
     QtQuick2ApplicationViewer viewer;
     QQmlContext *ctxt = viewer.rootContext();
-//    ctxt->setContextProperty("myModel", model);
+//    ctxt->setContextProperty("myModel", QVariant::fromValue(model));
     ctxt->setContextProperty("myModel", QVariant::fromValue(streamList));
     viewer.setMainQmlFile(QStringLiteral("qml/tv_002/main.qml"));
-    viewer.showExpanded();
+//    viewer.showExpanded();
+    viewer.showFullScreen();
 
     return app.exec();
 }

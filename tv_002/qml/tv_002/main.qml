@@ -10,46 +10,74 @@ Item {
 
         ColumnLayout
         {
+
             anchors.fill: parent
             Button{
                 text: "ahoj"
                 onClicked: {
 //                    console.log(myModel);
-                    myModel.setFilter("streamid=2")
+                    myModel[0].streammodel.setFilter("streamid=2")
                 }
             }
 
+            Text {
+                id: name
+//                text: myModel[0].streammodel
+            }
+
             ListView {
+                id: someListView
                 width: 300; height: 700
             //    anchors.fill: parent
                 spacing : 5
                 model: myModel
+//                model: myModel
                 cacheBuffer: 50
 
-                delegate: Row {
-                    height: 20
-                    Rectangle {
-                        color : "Red"
-                        width: 10
-                        height: 20;
+                delegate:
+                    Item {
+                        height: 30
                         Text {
-                            text : model;
+                            id: textdata
+                            text : model.modelData.name
+                            //                            text : someListView.model.
                         }
-                    }
 
+                        ListView {
+                            anchors.left: parent.left
+                            anchors.leftMargin: 150
+                            width : 500
+                            height : 50
+                            orientation: ListView.Horizontal
+                            model : streammodel
+                            spacing : 5
+                            clip: true
+                            delegate:
+                                Rectangle {
+                                    width : 90
+                                    height: eventTitleText.height
+                                    Text {
+                                        anchors.fill: parent
+                                        wrapMode: Text.Wrap
+                                        id : eventTitleText
+                                        text: model.title
+                                        color: "Blue"
+                                    }
+                            }
 
-//                    Text {
-//                        text: model.streamid
-//                        color: "Black"
-//                    }
-//                    Text {
-//                        text: model.title
-//                        color: "Blue"
-//                    }
-//                    Text {
-//                        text: model.shorttext
-//                        color : "Green"
-//                    }
+                            //                    Text {
+                            //                        text: model.streamid
+                            //                        color: "Black"
+                            //                    }
+                            //                    Text {
+                            //                        text: model.title
+                            //                        color: "Blue"
+                            //                    }
+                            //                    Text {
+                            //                        text: model.shorttext
+                            //                        color : "Green"
+                            //                    }
+                        }
                 }
             }
         }
