@@ -2,7 +2,7 @@
 #define STREAMLISTMODEL_H
 
 #include <QAbstractListModel>
-#include "stream.h"
+//#include "stream.h"
 
 //class StreamListModel : public QAbstractListModel
 //{
