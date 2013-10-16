@@ -8,6 +8,8 @@ Item {
     width: 1280
     height: 720
 
+    property real pixelPerSeconds: 1.0/10.0
+
         ColumnLayout
         {
 
@@ -29,9 +31,9 @@ Item {
                 id: someListView
                 width: 300; height: 700
             //    anchors.fill: parent
-                spacing : 5
+                spacing : 15
                 model: myModel
-//                model: myModel
+
                 cacheBuffer: 50
 
                 delegate:
@@ -40,138 +42,79 @@ Item {
                         Text {
                             id: textdata
                             text : model.modelData.name
-                            //                            text : someListView.model.
                         }
 
                         ListView {
                             anchors.left: parent.left
                             anchors.leftMargin: 150
-                            width : 500
+                            width : root.width - someListView.width
                             height : 50
                             orientation: ListView.Horizontal
                             model : streammodel
-                            spacing : 5
+                            spacing : 0
                             clip: true
                             delegate:
                                 Rectangle {
-                                    width : 90
-                                    height: eventTitleText.height
+                                    color : "Yellow"
+                                    border.color: "Green"
+                                    border.width: 1
+                                    width : model.duration * pixelPerSeconds
+                                    height: 50
+
                                     Text {
                                         anchors.fill: parent
                                         wrapMode: Text.Wrap
                                         id : eventTitleText
                                         text: model.title
                                         color: "Blue"
+                                        maximumLineCount : 2
                                     }
                             }
-
-                            //                    Text {
-                            //                        text: model.streamid
-                            //                        color: "Black"
-                            //                    }
-                            //                    Text {
-                            //                        text: model.title
-                            //                        color: "Blue"
-                            //                    }
-                            //                    Text {
-                            //                        text: model.shorttext
-                            //                        color : "Green"
-                            //                    }
                         }
                 }
             }
         }
+        focus : true;
+        Keys.onUpPressed: {
+            console.log("up")
+
+            for (var i=0; i<someListView.children.length; i++){
+                console.log("" + someListView.children[i]);
+            }
+
+            for (var i=0; i<someListView.children[0].length; i++){
+                console.log("" + someListView.children[0].children[i]);
+            }
+
+//            // focus next item
+
+//            for (var i=0; i<listOfViews.children.length; i++){
+//                if(listOfViews.children[i].activeFocus) {
+//                    var newFocusedItem = i - 1;
+//                    if(newFocusedItem < 0) {
+//                        newFocusedItem =  listOfViews.children.length-1;
+//                    }
+
+//                    var currentItem = listOfViews.children[i].currentItem;
+//                    console.log("currentItem x,y", currentItem.x, currentItem.y);
+
+//                    var nextItemIndex = listOfViews.children[newFocusedItem].indexAt(currentItem.x + currentItem.width*0.5, currentItem.y)
+//                    if(nextItemIndex === -1) {
+//                        nextItemIndex = listOfViews.children[newFocusedItem].indexAt(currentItem.x + currentItem.width*0.5 + 5, currentItem.y)
+//                    }
+
+//                    console.log("nextItemIndex ", nextItemIndex);
+
+//                    var contX = listOfViews.children[i].contentX;
+//                    listOfViews.children[newFocusedItem].currentIndex = nextItemIndex;
+//                    listOfViews.children[newFocusedItem].contentX = contX;
+//                    listOfViews.children[newFocusedItem].focus = true;
+//                    listOfViews.children[newFocusedItem].forceLayout();
+//                    break;
+//                }
+//            }
+
+            event.accepted = true;
+        }
 }
 
-
-
-//Item {
-//    property real _scaleFactor: root.width/1280;
-
-//    id: root
-//    width: 1280
-//    height: 720
-
-//    Image {
-//        id: background
-//        anchors.fill: parent
-//        source: "images/background.jpg"
-//    }
-
-//    FontLoader {
-//        id: font0;
-//        source: "fonts/DnCeBd__.ttf"
-//        onStatusChanged: {
-//            console.log("status:" + neakyfont.status);
-//        }
-//    }
-
-//    ColumnLayout
-//    {
-//        anchors.fill: parent
-//        anchors.topMargin: 60
-//        spacing: 10
-
-//        Clock {
-////            x: 92*_scaleFactor;
-////            y:(44.0  + 20.0)*_scaleFactor
-//            width: 10*_scaleFactor
-//            height: 22*_scaleFactor
-//            timerFontSize:30*_scaleFactor
-//            fontFamily : font0.name
-//        }
-
-
-//        EPGListView {
-//            Layout.fillWidth: true
-//            Layout.fillHeight: true
-//            textFont : font0.name
-//            id: streamList
-//            height: 800
-////            anchors.fill: parent
-////            anchors.right: parent.right
-////            anchors.left: parent.left
-////            anchors
-////            anchors.topMargin: 40*_scaleFactor;
-//            model : StreamsDataModel {}
-//        }
-//    }
-
-
-
-//    focus: true
-
-//    Keys.onDownPressed: {
-////        console.log("currentIndex:" + streamList.currentIndex + " count:"+streamList.count + " flicking:" + streamList.flicking + " moving:"+ streamList.moving);
-//        if(streamList.currentIndex == streamList.count)
-//        {
-
-//            streamList.currentIndex = emptyItemsBegin;
-//            streamList.positionViewAtIndex(emptyItemsBegin, ListView.SnapPosition)
-//        }
-//        else
-//        {
-//            streamList.incrementCurrentIndex()
-//        }
-//        event.accepted = true;
-//    }
-
-//    Keys.onUpPressed: {
-////        console.log("currentIndex:" + streamList.currentIndex + " count:"+streamList.count + " flicking:" + streamList.flicking + " moving:"+ streamList.moving);
-//        if(streamList.currentIndex == 0)
-//        {
-//            streamList.currentIndex = streamList.count-1;
-//            streamList.positionViewAtIndex(streamList.count-1, ListView.SnapPosition)
-
-////            epgList.currentIndex = streamList.count-1-emptyItemsEnd;
-////            epgList.positionViewAtIndex(streamList.count-1-emptyItemsEnd, ListView.SnapPosition)
-//        }
-//        else
-//        {
-//            streamList.decrementCurrentIndex()
-////            epgList.decrementCurrentIndex()
-//        }
-//        event.accepted = true;
-//    }
-
-//}

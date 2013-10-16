@@ -101,8 +101,8 @@ int main(int argc, char *argv[])
 //    ctxt->setContextProperty("myModel", QVariant::fromValue(model));
     ctxt->setContextProperty("myModel", QVariant::fromValue(streamList));
     viewer.setMainQmlFile(QStringLiteral("qml/tv_002/main.qml"));
-//    viewer.showExpanded();
-    viewer.showFullScreen();
+    viewer.showExpanded();
+//    viewer.showFullScreen();
 
     return app.exec();
 }
