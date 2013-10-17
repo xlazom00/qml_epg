@@ -7,8 +7,9 @@ Item {
     id : root;
     width: 1280
     height: 720
+    property real scaleFactor: root.width/1280;
 
-    readonly property real pixelPerSeconds: 1.0/30.0
+    readonly property real pixelPerSeconds: 1.0/20.0
 
     function logThis( something){
         console.log(Qt.formatTime(new Date(), "hh:mm:ss:zzz ") + something);
@@ -42,50 +43,81 @@ Item {
             cacheBuffer: 50
 
             signal nieco( int shift, variant b)
+            signal nieco2( real newContentX)
+
+            onNieco2: {
+//                logThis( "newContentX:" + newContentX);
+                var localListListView = someListView.children[0].children
+                for (var ii=0; ii<localListListView.length-1; ii++){
+                    if(localListListView[ii].objectName === "0"){
+//                        logThis(localListListView[ii].eventsListView + " focus:" + localListListView[ii].eventsListView.focus + " activeFocus" + localListListView[ii].eventsListView.activeFocus);
+                        if(localListListView[ii].eventsListView.focus === false){
+                            localListListView[ii].eventsListView.contentX = newContentX;
+                        }
+                    }
+                }
+            }
 
             onNieco: {
-                logThis( "shift:" + shift + " b:" + b);
+//                logThis( "shift:" + shift + " b:" + b);
                 move(shift, b, someListView.children[0].children);
             }
 
-            function move(shift, currentListView, listListView)  {
-                logThis(shift + " " + currentListView + " " + listListView);
+            function move(shift, currentListView, aListListView)  {
+//                logThis(shift + " " + aListListView + " " + aListListView);
 //                logThis(currentListView +" currentListView focus:" + currentListView.focus + " activeFocus:" + currentListView.activeFocus)
 //                logThis(listListView.length);
                 var validListViews = []
-                for (var ii=0; ii<listListView.length-1; ii++){
-                    if(listListView[ii].objectName === "0"){
-                        validListViews.push(listListView[ii]);
+                for (var ii=0; ii<aListListView.length-1; ii++){
+                    if(aListListView[ii].objectName === "0"){
+                        validListViews.push(aListListView[ii]);
                     }
                 }
 
                 for (var i=0; i<validListViews.length; i++){
-                    var eventListView = validListViews[i].eventsListView;
+                    var currentSelectedListView = validListViews[i].eventsListView;
 
-                    logThis( i + " " + temp + " activeFocus:" + eventListView.activeFocus + " focus:" + eventListView.focus );
-                    if(eventListView.activeFocus) {
-                        var newFocusedItem = i + shift;
-                        if(newFocusedItem >= validListViews.length) {
-                            newFocusedItem = 0;
-                        }else if (newFocusedItem < 0) {
-                            newFocusedItem =  validListViews.length-1;
+//                    logThis( i + " " + currentSelectedListView + " activeFocus:" + currentSelectedListView.activeFocus + " focus:" + currentSelectedListView.focus );
+                    if(currentSelectedListView.focus) {
+                        var currentSelectedItem = currentSelectedListView.currentItem;
+                        console.log("currentSelectedItem x,y", currentSelectedItem + " " + currentSelectedItem.x + " " + currentSelectedItem.y);
+
+                        var newFocusedListViewIndex = i + shift;
+                        if(newFocusedListViewIndex >= validListViews.length) {
+                            newFocusedListViewIndex = 0;
+                            break;
+                        }else if (newFocusedListViewIndex < 0) {
+                            newFocusedListViewIndex =  validListViews.length-1;
+                            break;
                         }
+//                        console.log("newFocusedListViewIndex:" + newFocusedListViewIndex);
+                        var newFocusedListView = validListViews[newFocusedListViewIndex].eventsListView;
 
-                        var currentItem = listListView[i].currentItem;
-                        //                console.log("currentItem x,y", currentItem.x, currentItem.y);
 
-                        var nextItemIndex = validListViews[newFocusedItem].indexAt(currentItem.x + currentItem.width*0.5, currentItem.y)
+
+
+
+
+                        var nextItemIndex = newFocusedListView.indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5, currentSelectedItem.y)
                         if(nextItemIndex === -1) {
-                            nextItemIndex = validListViews[newFocusedItem].indexAt(currentItem.x + currentItem.width*0.5 + 5, currentItem.y)
+                            nextItemIndex = newFocusedListView.indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5 + 5, currentSelectedItem.y)
                         }
 
                         //                console.log("nextItemIndex ", nextItemIndex);
 
-                        var contX = validListViews[i].contentX;
-                        validListViews[newFocusedItem].currentIndex = nextItemIndex;
-                        validListViews[newFocusedItem].contentX = contX;
-                        validListViews[newFocusedItem].focus = true;
-                        validListViews[newFocusedItem].forceLayout();
+                        var contX = currentSelectedListView.contentX;
+                        logThis(nextItemIndex + " current.contentX:" + contX + " newFocusedListView.contentX:" + newFocusedListView.contentX);
+                        if(shift > 0) {
+                            someListView.incrementCurrentIndex()
+                        } else {
+                            someListView.decrementCurrentIndex();
+                        }
+                        newFocusedListView.focus = true;
+                        newFocusedListView.currentIndex = nextItemIndex;
+                        newFocusedListView.contentX = contX;
+
+//                        someListView.cu
+//                        newFocusedListView.forceLayout();
                         break;
                     }
                 }
@@ -104,11 +136,15 @@ Item {
 
                     if(event.key === Qt.Key_Up) {
                         event.accepted = true;
-                        ListView.view.nieco(1, eventsListView);
+                        if(!eventsListView.moving){
+                            ListView.view.nieco(-1, eventsListView);
+                        }
                     }
                     else if(event.key === Qt.Key_Down) {
                         event.accepted = true;
-                        ListView.view.nieco(-1, eventsListView);
+                        if(!eventsListView.moving){
+                            ListView.view.nieco(1, eventsListView);
+                        }
                     }
                 }
 
@@ -129,6 +165,37 @@ Item {
                     model : streammodel
                     spacing : 0
                     clip: true
+
+                    highlightMoveDuration: 200;
+                    highlightMoveVelocity: 100;
+                    highlightFollowsCurrentItem: true
+                    highlightRangeMode : ListView.ApplyRange
+                    preferredHighlightBegin: 50.0*root.scaleFactor;
+                    preferredHighlightEnd: width - preferredHighlightBegin
+
+                    Rectangle {
+                        color : "Red"
+                        width : 2
+                        height :50
+                        x : parent.preferredHighlightBegin
+                        y : 0
+                    }
+                    Rectangle {
+                        color : "Red"
+                        width : 2
+                        height :50
+                        x : parent.preferredHighlightEnd
+                        y : 0
+                    }
+
+                    onContentXChanged: {
+        //                console.log("contentX:" + contentX + " originX:" + originX);
+                        if(focus){
+                            eventsRoot.ListView.view.nieco2(contentX);
+                        }
+                    }
+
+
                     delegate:
                         Rectangle {
                             color :  ListView.isCurrentItem && ListView.view.activeFocus ? "Yellow" : "white"
@@ -177,12 +244,12 @@ Item {
         //                        newFocusedItem =  listOfViews.children.length-1;
         //                    }
 
-        //                    var currentItem = listOfViews.children[i].currentItem;
-        //                    console.log("currentItem x,y", currentItem.x, currentItem.y);
+        //                    var currentSelectedItem = listOfViews.children[i].currentSelectedItem;
+        //                    console.log("currentSelectedItem x,y", currentSelectedItem.x, currentSelectedItem.y);
 
-        //                    var nextItemIndex = listOfViews.children[newFocusedItem].indexAt(currentItem.x + currentItem.width*0.5, currentItem.y)
+        //                    var nextItemIndex = listOfViews.children[newFocusedItem].indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5, currentSelectedItem.y)
         //                    if(nextItemIndex === -1) {
-        //                        nextItemIndex = listOfViews.children[newFocusedItem].indexAt(currentItem.x + currentItem.width*0.5 + 5, currentItem.y)
+        //                        nextItemIndex = listOfViews.children[newFocusedItem].indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5 + 5, currentSelectedItem.y)
         //                    }
 
         //                    console.log("nextItemIndex ", nextItemIndex);
@@ -204,7 +271,7 @@ Item {
         someListView.positionViewAtIndex(0, ListView.SnapPosition)
         someListView.focus = true;
 
-        //            console.log(someListView.currentItem.children.length);
+        console.log(someListView.currentItem);
         someListView.currentItem.children[1].currentIndex = 0
         someListView.currentItem.children[1].positionViewAtIndex(0, ListView.SnapPosition)
         someListView.currentItem.children[1].focus = true
