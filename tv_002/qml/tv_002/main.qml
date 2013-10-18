@@ -19,26 +19,18 @@ Item {
     {
 
         anchors.fill: parent
-        Button{
-            text: "ahoj"
-            onClicked: {
-                //                    console.log(myModel);
-                myModel[0].streammodel.setFilter("streamid=2")
-            }
-        }
 
-        Text {
-            id: name
-            //                text: myModel[0].streammodel
-        }
 
         ListView {
             id: someListView
 
-            width: 300; height: 700
-            //    anchors.fill: parent
-            spacing : 15
+            width: 900;
+            height: 400
+            spacing : 0
             model: myModel
+            highlightMoveDuration: 200;
+            highlightMoveVelocity: 100;
+            clip : true
 
             cacheBuffer: 50
 
@@ -68,31 +60,46 @@ Item {
 //                logThis(currentListView +" currentListView focus:" + currentListView.focus + " activeFocus:" + currentListView.activeFocus)
 //                logThis(listListView.length);
                 var validListViews = []
-                for (var ii=0; ii<aListListView.length-1; ii++){
+                for (var ii=0; ii<aListListView.length; ii++){
                     if(aListListView[ii].objectName === "0"){
                         validListViews.push(aListListView[ii]);
+
                     }
                 }
+//                logThis("validListViews:" + validListViews.length);
+//                logThis("currentIndex:" + someListView.currentIndex + " " + someListView.model.length);
+
 
                 for (var i=0; i<validListViews.length; i++){
                     var currentSelectedListView = validListViews[i].eventsListView;
 
+
 //                    logThis( i + " " + currentSelectedListView + " activeFocus:" + currentSelectedListView.activeFocus + " focus:" + currentSelectedListView.focus );
                     if(currentSelectedListView.focus) {
                         var currentSelectedItem = currentSelectedListView.currentItem;
-                        console.log("currentSelectedItem x,y", currentSelectedItem + " " + currentSelectedItem.x + " " + currentSelectedItem.y);
+//                        console.log("currentSelectedItem x,y", currentSelectedItem + " " + currentSelectedItem.x + " " + currentSelectedItem.y);
 
-                        var newFocusedListViewIndex = i + shift;
-                        if(newFocusedListViewIndex >= validListViews.length) {
-                            newFocusedListViewIndex = 0;
+
+                        var newFocusedListViewIndex = someListView.currentIndex + shift;
+                        if(newFocusedListViewIndex >= someListView.model.length) {
+//                            newFocusedListViewIndex = 0;
+//                            console.log("break newFocusedListViewIndex:" + newFocusedListViewIndex);
                             break;
                         }else if (newFocusedListViewIndex < 0) {
-                            newFocusedListViewIndex =  validListViews.length-1;
+//                            newFocusedListViewIndex =  validListViews.length-1;
+//                            console.log("break newFocusedListViewIndex:" + newFocusedListViewIndex);
                             break;
                         }
-//                        console.log("newFocusedListViewIndex:" + newFocusedListViewIndex);
-                        var newFocusedListView = validListViews[newFocusedListViewIndex].eventsListView;
 
+                        if(shift > 0) {
+                            someListView.incrementCurrentIndex()
+                        } else {
+                            someListView.decrementCurrentIndex();
+                        }
+
+
+                        var newFocusedListView = someListView.currentItem.eventsListView;
+//                        logThis(newFocusedListView);
 
 
 
@@ -106,18 +113,11 @@ Item {
                         //                console.log("nextItemIndex ", nextItemIndex);
 
                         var contX = currentSelectedListView.contentX;
-                        logThis(nextItemIndex + " current.contentX:" + contX + " newFocusedListView.contentX:" + newFocusedListView.contentX);
-                        if(shift > 0) {
-                            someListView.incrementCurrentIndex()
-                        } else {
-                            someListView.decrementCurrentIndex();
-                        }
+//                        logThis(nextItemIndex + " current.contentX:" + contX + " newFocusedListView.contentX:" + newFocusedListView.contentX);
+
                         newFocusedListView.focus = true;
                         newFocusedListView.currentIndex = nextItemIndex;
                         newFocusedListView.contentX = contX;
-
-//                        someListView.cu
-//                        newFocusedListView.forceLayout();
                         break;
                     }
                 }
@@ -125,9 +125,12 @@ Item {
 
             delegate:
                 Item {
+
                 property alias eventsListView : eventsListView
                 id : eventsRoot
                 objectName : "0"
+                height: 50
+                width : ListView.width;
 
                 Keys.onPressed: {
                     if(event.isAutoRepeat){
@@ -148,18 +151,24 @@ Item {
                     }
                 }
 
-                height: 30
+                Rectangle {
+                    border.color : "green"
+                    border.width: 5;
+                    anchors.fill: textdata
+                }
                 Text {
                     id: textdata
                     text : model.modelData.name
                     color : "brown"
+                    width : 100
+                    height : 50
                 }
 
                 ListView {
                     id : eventsListView
-                    anchors.left: parent.left
-                    anchors.leftMargin: 150
-                    width : root.width - someListView.width
+                    anchors.left: textdata.right
+//                    anchors.leftMargin: 150
+                    width : 720
                     height : 50
                     orientation: ListView.Horizontal
                     model : streammodel
@@ -272,9 +281,9 @@ Item {
         someListView.focus = true;
 
         console.log(someListView.currentItem);
-        someListView.currentItem.children[1].currentIndex = 0
-        someListView.currentItem.children[1].positionViewAtIndex(0, ListView.SnapPosition)
-        someListView.currentItem.children[1].focus = true
+        someListView.currentItem.eventsListView.currentIndex = 0
+        someListView.currentItem.eventsListView.positionViewAtIndex(0, ListView.SnapPosition)
+        someListView.currentItem.eventsListView.focus = true
 
     }
 
