@@ -37,17 +37,19 @@ Item {
     //                console.log("contentX:" + contentX + " originX:" + originX);
                     if(activeFocus){
                         listview2.contentX = listview1.contentX
+                        listview3.contentX = listview1.contentX
+                        listview4.contentX = listview1.contentX
                     }
                 }
 
                 orientation: ListView.Horizontal;
-                spacing : 5
+                spacing : 0
 
                 model : EPGDataModel {}
                 delegate: Rectangle {
                     width: 120
                     height: 50
-                    color : ListView.isCurrentItem && listview1.activeFocus ? "Yellow" : "Red"
+                    border.color : ListView.isCurrentItem && listview1.activeFocus ? "Yellow" : "Red"
                     Text {
                         anchors.fill: parent
                         anchors.centerIn: parent
@@ -73,7 +75,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 orientation: ListView.Horizontal;
-                spacing : 5
+                spacing : 0
 
                 onContentXChanged: {
     //                console.log("contentX:" + contentX + " originX:" + originX);
@@ -89,7 +91,85 @@ Item {
                 delegate: Rectangle {
                     width: 180
                     height: 50
-                    color : ListView.isCurrentItem && listview2.activeFocus ? "Yellow" : "Blue"
+                    border.color : ListView.isCurrentItem && listview2.activeFocus ? "Yellow" : "Blue"
+                    Text {
+                        anchors.fill: parent
+                        anchors.centerIn: parent
+                        text: title
+                        color : "Black"
+                        wrapMode: Text.Wrap
+                    }
+                }
+
+                highlightMoveDuration: 200;
+    //            highlightResizeDuration: 200;
+                highlightMoveVelocity: 100;
+                highlightFollowsCurrentItem: true
+                highlightRangeMode : ListView.ApplyRange
+                preferredHighlightBegin: 212
+                preferredHighlightEnd: root.width - preferredHighlightBegin
+            }
+            ListView {
+                id : listview3
+                anchors.left: parent.left
+                anchors.right: parent.right
+                orientation: ListView.Horizontal;
+                spacing : 0
+
+                onContentXChanged: {
+    //                console.log("contentX:" + contentX + " originX:" + originX);
+                    if(activeFocus){
+                        listview1.contentX = listview2.contentX
+                    }
+                }
+
+    //            highlightMoveDuration : 1
+                height: 50
+
+                model : EPGDataModel {}
+                delegate: Rectangle {
+                    width: 160
+                    height: 50
+                    border.color : ListView.isCurrentItem && listview2.activeFocus ? "Yellow" : "Blue"
+                    Text {
+                        anchors.fill: parent
+                        anchors.centerIn: parent
+                        text: title
+                        color : "Black"
+                        wrapMode: Text.Wrap
+                    }
+                }
+
+                highlightMoveDuration: 200;
+    //            highlightResizeDuration: 200;
+                highlightMoveVelocity: 100;
+                highlightFollowsCurrentItem: true
+                highlightRangeMode : ListView.ApplyRange
+                preferredHighlightBegin: 212
+                preferredHighlightEnd: root.width - preferredHighlightBegin
+            }
+            ListView {
+                id : listview4
+                anchors.left: parent.left
+                anchors.right: parent.right
+                orientation: ListView.Horizontal;
+                spacing : 0
+
+                onContentXChanged: {
+    //                console.log("contentX:" + contentX + " originX:" + originX);
+                    if(activeFocus){
+                        listview1.contentX = listview2.contentX
+                    }
+                }
+
+    //            highlightMoveDuration : 1
+                height: 50
+
+                model : EPGDataModel {}
+                delegate: Rectangle {
+                    width: 170
+                    height: 50
+                    border.color : ListView.isCurrentItem && listview2.activeFocus ? "Yellow" : "Blue"
                     Text {
                         anchors.fill: parent
                         anchors.centerIn: parent

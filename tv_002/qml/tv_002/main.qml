@@ -23,8 +23,8 @@ Item {
 
         ListView {
             id: someListView
+            Layout.fillWidth : true
 
-            width: 900;
             height: 400
             spacing : 0
             model: myModel
@@ -32,7 +32,7 @@ Item {
             highlightMoveVelocity: 100;
             clip : true
 
-            cacheBuffer: 50
+            cacheBuffer: 0
 
             signal nieco( int shift, variant b)
             signal nieco2( real newContentX)
@@ -78,6 +78,17 @@ Item {
                     if(currentSelectedListView.focus) {
                         var currentSelectedItem = currentSelectedListView.currentItem;
 //                        console.log("currentSelectedItem x,y", currentSelectedItem + " " + currentSelectedItem.x + " " + currentSelectedItem.y);
+//                        if(typeof currentSelectedListView == 'undefined'){
+//                            logThis("undefined");
+//                            break;
+//                        }
+                        if("x" in currentSelectedItem){
+
+                        } else {
+                            logThis("x is not defined");
+                            logThis(currentSelectedItem);
+                            break;
+                        }
 
 
                         var newFocusedListViewIndex = someListView.currentIndex + shift;
@@ -103,21 +114,57 @@ Item {
 
 
 
-
-
-                        var nextItemIndex = newFocusedListView.indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5, currentSelectedItem.y)
-                        if(nextItemIndex === -1) {
-                            nextItemIndex = newFocusedListView.indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5 + 5, currentSelectedItem.y)
+                        var nextItem2 = newFocusedListView.itemAt(currentSelectedItem.x + currentSelectedItem.width*0.5, currentSelectedItem.y)
+                        if(nextItem2 === null) {
+                            nextItem2 = newFocusedListView.itemAt(currentSelectedItem.x + currentSelectedItem.width*0.5 + 5, currentSelectedItem.y)
                         }
 
-                        //                console.log("nextItemIndex ", nextItemIndex);
+                        if(nextItem2 === null) {
+                            logThis("nextItem2 not found")
+                            break
+                        }
+
+//                        logThis(currentSelectedItem.x);
+//                        currentSelectedItem.map
+
+//                        logThis("abs0:" + Math.abs(newFocusedListView.preferredHighlightBegin - currentSelectedItem.x));
+//                        logThis("abs1:" + Math.abs(newFocusedListView.preferredHighlightBegin - currentSelectedItem.x));
+
+                        var prevItemIndex = newFocusedListView.indexAt(nextItem2.x - 5, nextItem2.y)
+                        if(prevItemIndex === -1) {
+                            logThis("prevItem not found")
+                            break
+                        }else{
+                            logThis("prevItemIndex:"+prevItemIndex);
+                        }
 
                         var contX = currentSelectedListView.contentX;
-//                        logThis(nextItemIndex + " current.contentX:" + contX + " newFocusedListView.contentX:" + newFocusedListView.contentX);
-
+                        logThis(contX + " " + newFocusedListView.contentX);
                         newFocusedListView.focus = true;
-                        newFocusedListView.currentIndex = nextItemIndex;
                         newFocusedListView.contentX = contX;
+//                        newFocusedListView.positionViewAtIndex(prevItemIndex, ListView.Contain );
+                        newFocusedListView.currentIndex = prevItemIndex;
+                        logThis(contX + " " + newFocusedListView.contentX);
+                        newFocusedListView.animateToItem(1);
+//                        newFocusedListView.currentIndex = prevItemIndex + 1;
+//                        newFocusedListView.incrementCurrentIndex();
+//                        logThis(contX + " " + newFocusedListView.contentX);
+
+//                        newFocusedListView.currentIndex = nextItemIndex2;
+
+//                        var nextItemIndex2 = newFocusedListView.indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5, currentSelectedItem.y)
+//                        if(nextItemIndex2 === -1) {
+//                            nextItemIndex2 = newFocusedListView.indexAt(currentSelectedItem.x + currentSelectedItem.width*0.5 + 5, currentSelectedItem.y)
+//                        }
+
+//                        //                console.log("nextItemIndex ", nextItemIndex);
+
+//                        var contX = currentSelectedListView.contentX;
+////                        logThis(nextItemIndex + " current.contentX:" + contX + " newFocusedListView.contentX:" + newFocusedListView.contentX);
+
+//                        newFocusedListView.focus = true;
+//                        newFocusedListView.currentIndex = nextItemIndex;
+//                        newFocusedListView.contentX = contX;
                         break;
                     }
                 }
@@ -161,19 +208,22 @@ Item {
                     text : model.modelData.name
                     color : "brown"
                     width : 100
-                    height : 50
+                    height : eventsRoot.height
                 }
 
                 ListView {
                     id : eventsListView
                     anchors.left: textdata.right
 //                    anchors.leftMargin: 150
-                    width : 720
-                    height : 50
+                    width : eventsRoot.ListView.view.width - textdata.width
+                    height : eventsRoot.height
                     orientation: ListView.Horizontal
                     model : streammodel
                     spacing : 0
                     clip: true
+                    cacheBuffer : 0
+
+                    property int planShift: 0
 
                     highlightMoveDuration: 200;
                     highlightMoveVelocity: 100;
@@ -181,6 +231,24 @@ Item {
                     highlightRangeMode : ListView.ApplyRange
                     preferredHighlightBegin: 50.0*root.scaleFactor;
                     preferredHighlightEnd: width - preferredHighlightBegin
+
+                    signal animateToItem(int shift)
+
+                    onAnimateToItem: {
+                        planShift = shift;
+                        shiftTimer.start()
+                    }
+                    Timer {
+                        id : shiftTimer
+                        interval: 1; repeat: false
+                        onTriggered: {
+                            if(eventsListView.planShift > 0){
+                                eventsListView.incrementCurrentIndex();
+                            }else{
+                                eventsListView.decrementCurrentIndex();
+                            }
+                        }
+                    }
 
                     Rectangle {
                         color : "Red"
