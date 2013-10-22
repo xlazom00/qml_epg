@@ -11,6 +11,8 @@ Item {
 
     readonly property real pixelPerSeconds: 1.0/20.0
 
+    property int moveDirection : 1;
+
     function logThis( something){
         console.log(Qt.formatTime(new Date(), "hh:mm:ss:zzz ") + something);
     }
@@ -130,7 +132,14 @@ Item {
 //                        logThis("abs0:" + Math.abs(newFocusedListView.preferredHighlightBegin - currentSelectedItem.x));
 //                        logThis("abs1:" + Math.abs(newFocusedListView.preferredHighlightBegin - currentSelectedItem.x));
 
-                        var prevItemIndex = newFocusedListView.indexAt(nextItem2.x - 5, nextItem2.y)
+                        var prevItemIndex;
+                        // TODO : -1 and +1 and 0
+                        if(root.moveDirection > 0){
+                            prevItemIndex = newFocusedListView.indexAt(nextItem2.x - 5, nextItem2.y)
+                        }else {
+                            prevItemIndex = newFocusedListView.indexAt(nextItem2.x + nextItem2.width + 5, nextItem2.y)
+                        }
+
                         if(prevItemIndex === -1) {
                             logThis("prevItem not found")
                             break
@@ -144,8 +153,9 @@ Item {
                         newFocusedListView.contentX = contX;
 //                        newFocusedListView.positionViewAtIndex(prevItemIndex, ListView.Contain );
                         newFocusedListView.currentIndex = prevItemIndex;
+                        newFocusedListView.contentX = contX;
                         logThis(contX + " " + newFocusedListView.contentX);
-                        newFocusedListView.animateToItem(1);
+                        newFocusedListView.animateToItem(root.moveDirection);
 //                        newFocusedListView.currentIndex = prevItemIndex + 1;
 //                        newFocusedListView.incrementCurrentIndex();
 //                        logThis(contX + " " + newFocusedListView.contentX);
@@ -224,6 +234,8 @@ Item {
                     cacheBuffer : 0
 
                     property int planShift: 0
+                    property alias activeMove : shiftTimer.running
+
 
                     highlightMoveDuration: 200;
                     highlightMoveVelocity: 100;
@@ -272,10 +284,19 @@ Item {
                         }
                     }
 
+                    Keys.onPressed: {
+                        if(event.key === Qt.Key_Left) {
+                            root.moveDirection = -1;
+                        }else if(event.key === Qt.Key_Right) {
+                            root.moveDirection = 1;
+                        }
+
+
+                    }
 
                     delegate:
                         Rectangle {
-                            color :  ListView.isCurrentItem && ListView.view.activeFocus ? "Yellow" : "white"
+                            color :  ListView.isCurrentItem && ListView.view.activeFocus && !ListView.view.activeMove ? "Yellow" : "white"
                             border.color: "Green"
                             border.width: 1
                             width : model.duration * pixelPerSeconds
