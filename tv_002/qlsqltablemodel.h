@@ -14,6 +14,7 @@ class QLSqlTableModel : public QSqlRelationalTableModel
   public:
       QLSqlTableModel(QObject *parent = 0, QSqlDatabase db = QSqlDatabase());
       Q_INVOKABLE QVariant data(const QModelIndex &index, int role=Qt::DisplayRole ) const;
+      Q_INVOKABLE int rowCount() const;
       void generateRoleNames();
       Q_INVOKABLE void setFilter(const QString &filter);
 //  #ifdef HAVE_QT5

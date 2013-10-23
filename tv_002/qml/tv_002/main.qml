@@ -13,6 +13,8 @@ Item {
 
     property int moveDirection : 1;
 
+    property int magicStartTime : 1380996000
+
     function logThis( something){
         console.log(Qt.formatTime(new Date(), "hh:mm:ss:zzz ") + something);
     }
@@ -329,9 +331,9 @@ Item {
                     }
                     Timer {
                         id : shiftTimer
-                        interval: 10; repeat: false
+                        interval: 1; repeat: false
                         onTriggered: {
-                            logThis(eventsListView.nextItemX);
+                            logThis(eventsListView.nextItemX + " count:" + eventsListView.count +  " rowcount:" + eventsListView.model.rowCount());
                             var nextItemIndex2 = eventsListView.indexAt(eventsListView.nextItemX + eventsListView.nextItemWidth*0.5, 5)
                             if(nextItemIndex2 === -1) {
                                 nextItemIndex2 = eventsListView.indexAt(eventsListView.nextItemX + eventsListView.nextItemWidth*0.5 + 5.0, 5)
@@ -443,20 +445,24 @@ Item {
 
                     delegate:
                         Rectangle {
+                            x : (model.startime-magicStartTime)* pixelPerSeconds
                             id :streamText;
                             color :  ListView.isCurrentItem && ListView.view.activeFocus && !ListView.view.activeMove ? "Yellow" : "white"
                             border.color: "Green"
                             border.width: 1
-                            width : Math.min(model.duration * pixelPerSeconds, 400)
+                            width : model.duration * pixelPerSeconds
                             height: 50
 
                             Text {
                                 anchors.fill: parent
                                 wrapMode: Text.Wrap
                                 id : eventTitleText
-                                text: streamText.x  +" "+  model.title
+                                text: streamText.x  +" " + (model.startime-magicStartTime)* pixelPerSeconds  +" " +  model.title
                                 color: "Black"
                                 maximumLineCount : 2
+                            }
+                            Component.onCompleted: {
+                                streamText.x = (model.startime-magicStartTime)* pixelPerSeconds
                             }
                         }
                 }
