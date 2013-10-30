@@ -12,6 +12,11 @@ QLSqlTableModel::QLSqlTableModel(QObject *parent, QSqlDatabase db)
 {
 }
 
+int QLSqlTableModel::rowCount() const
+{
+    return QSqlTableModel::rowCount();
+}
+
 void QLSqlTableModel::setFilter(const QString &filter)
 {
     QSqlRelationalTableModel::setFilter(filter);

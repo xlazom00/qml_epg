@@ -77,8 +77,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<QLSqlTableModel>();
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-//    db.setDatabaseName("app.sqlite");
-    db.setDatabaseName("c:\\QtWork\\qml_epg\\tv_002\\data\\app.sqlite");
+    db.setDatabaseName("../tv_002/data/app.sqlite");
+//    db.setDatabaseName("c:\\QtWork\\qml_epg\\tv_002\\data\\app.sqlite");
     bool ret = db.open();
     qDebug() << "db open" << ret;
 
