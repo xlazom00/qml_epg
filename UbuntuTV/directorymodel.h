@@ -20,7 +20,7 @@
 #include <QAbstractListModel>
 #include <QDir>
 #include <QObject>
-#include <QtDeclarative/qdeclarative.h>
+#include <qqml.h>
 #include <QVariant>
 
 class DirectoryModel : public QAbstractListModel

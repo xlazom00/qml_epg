@@ -18,7 +18,7 @@
 
 import QtQuick 2.2
 //import Unity2d 1.0
-import People 1.0
+import Test 1.0
 import "../common"
 import "../common/fontUtils.js" as FontUtils
 import "../common/utils.js" as Utils

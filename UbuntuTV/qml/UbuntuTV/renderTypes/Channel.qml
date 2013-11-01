@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.2
+import QtQuick.XmlListModel 2.0
 //import QtQuick 1.0
 import "../../common/utils.js" as Utils
 import "../../common/units.js" as Units
