@@ -19,7 +19,7 @@
 Qt.include("units.js")
 
 function fontSizeToPixels(size) {
-    if (unity2dConfiguration.formFactor === "desktop") {
+    if (unity2dConfigurationformFactor === "desktop") {
         switch (size) {
             case "small": return dtPx(12)
             case "medium": return dtPx(15)

@@ -22,19 +22,21 @@ var desktopPixelDensity = 112
 var tvDistanceToDisplay = 2.0
 var tvPixelDensity = 52 // 1080p on a 42" screen
 
+var unity2dConfigurationformFactor = "desktop"
+
 /* distanceToDisplay and pixelDensity cannot be global javascript variables
    because they would not be able to access unity2dConfiguration.formFactor
 */
 function dtPx(desktopPixels) {
-    var distanceToDisplay = unity2dConfiguration.formFactor === "desktop" ? desktopDistanceToDisplay : tvDistanceToDisplay
-    var pixelDensity = unity2dConfiguration.formFactor === "desktop" ? desktopPixelDensity : tvPixelDensity
+    var distanceToDisplay = unity2dConfigurationformFactor === "desktop" ? desktopDistanceToDisplay : tvDistanceToDisplay
+    var pixelDensity = unity2dConfigurationformFactor === "desktop" ? desktopPixelDensity : tvPixelDensity
     var factorFromDesktop = pixelDensity / desktopPixelDensity * distanceToDisplay / desktopDistanceToDisplay
     return desktopPixels * factorFromDesktop
 }
 
 function tvPx(tvPixels) {
-    var distanceToDisplay = unity2dConfiguration.formFactor === "desktop" ? desktopDistanceToDisplay : tvDistanceToDisplay
-    var pixelDensity = unity2dConfiguration.formFactor === "desktop" ? desktopPixelDensity : tvPixelDensity
+    var distanceToDisplay = unity2dConfigurationformFactor === "desktop" ? desktopDistanceToDisplay : tvDistanceToDisplay
+    var pixelDensity = unity2dConfigurationformFactor === "desktop" ? desktopPixelDensity : tvPixelDensity
     var factorFromTv = pixelDensity / tvPixelDensity * distanceToDisplay / tvDistanceToDisplay
     return tvPixels * factorFromTv
 }
