@@ -45,6 +45,10 @@ Item {
     property bool isCutAtStart
     property int textMargin
 
+//    layer.enabled : true
+//    layer.objectName: "aaa"
+//    layer.textureSize : Qt.size(1024, 2048)
+
     Rectangle  {
         id: background
         anchors.fill: parent
@@ -74,6 +78,7 @@ Item {
 
         style: Text.Raised
         styleColor: "#1e1e1e"
+//        color: "#1e1e1e"
     }
 
     state: {

@@ -31,19 +31,24 @@ Item {
         anchors.topMargin: Units.tvPx(1)
         anchors.bottomMargin: Units.tvPx(1)
 
-        source: path + "/logo.png"
+        source: "file:///" + path + "/logo.png"
         sourceSize.width: Units.tvPx(200)
         sourceSize.height: Units.tvPx(78)
         width: sourceSize.width
         height: sourceSize.height
         opacity: (isSelected) ? 1.0 : 0.0
+        visible: isSelected
         asynchronous: true
+//        Component.onCompleted: {
+//            console.log("logo: " + source);
+//        }
     }
 
     Rectangle {
         anchors.fill: unselectedLogo
         color: Qt.darker(Utils.darkAubergine)
         opacity: (!isSelected) ? 1.0 : 0.0
+        visible: !isSelected
     }
 
     Image {
@@ -52,12 +57,16 @@ Item {
         anchors.topMargin: Units.tvPx(1)
         anchors.bottomMargin: Units.tvPx(1)
 
-        source: path + "/logo_bw.png"
+        source: "file:///" + path + "/logo_bw.png"
         sourceSize.width: Units.tvPx(200)
         sourceSize.height: Units.tvPx(78)
         width: sourceSize.width
         height: sourceSize.height
         opacity: (!isSelected) ? 0.5 : 0.0
+        visible: !isSelected
         asynchronous: true
+//        Component.onCompleted: {
+//            console.log("unselectedLogo: " + source);
+//        }
     }
 }

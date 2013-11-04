@@ -109,7 +109,7 @@ void DirectoryModel::setPath(const QString &path)
     }
 
     QDir newDir(fixedPath);
-    fixedPath = newDir.absolutePath();
+    fixedPath = newDir.absolutePath().mid(2);
 
     if (m_path != fixedPath) {
         QDir oldDir(m_path);

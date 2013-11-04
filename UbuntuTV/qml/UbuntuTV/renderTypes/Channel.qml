@@ -42,7 +42,8 @@ Item {
 
     property alias items: broadcasts
     property int selectedBroadcast: -1
-    property string offAirTitle: u2d.tr("Off Air")
+//    property string offAirTitle: u2d.tr("Off Air")
+    property string offAirTitle: "Off Air"
 
     signal loaded(variant start, variant end)
 
@@ -56,6 +57,7 @@ Item {
         XmlRole { name: "title"; query: "programme/display_titles/title/string()" }
 
         onStatusChanged: {
+//            console.log(status);
             if (status == XmlListModel.Ready) {
                 if (schedule.count == 0) return;
 
@@ -104,6 +106,10 @@ Item {
 
                 if (channel.isSelected) selectNext()
             }
+            if(status == XmlListModel.Error) {
+                console.log(errorString());
+            }
+
         }
     }
 

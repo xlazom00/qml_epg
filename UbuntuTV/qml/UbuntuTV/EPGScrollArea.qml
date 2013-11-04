@@ -169,7 +169,7 @@ Flickable {
                 isSelected: area.selectedChannel == index
                 isAlternateRow: index % 2 == 0
 
-                dataSource: model.path + "/epg.xml"
+                dataSource: "file:///" + model.path + "/epg.xml"
 
                 /* When each channel finishes loading its data it will emit a signal if its
                    programme data extends past the current boundaries of the global timeline, which
@@ -179,6 +179,7 @@ Flickable {
                    of the global timeline. Thus as new channels are loaded other channels will
                    re-adjust their items. */
                 onLoaded: {
+                    console.log("dataSource:" + dataSource);
                     if (area.startOfTimeline == undefined || start < area.startOfTimeline)
                         newStartOfTimeline(start)
                     if (area.endOfTimeline == undefined || end > area.endOfTimeline)
@@ -187,6 +188,9 @@ Flickable {
 
                 selectionTracker: area.selectionTracker
                 onIsSelectedChanged: if (isSelected) area.selectedChannelItem = channel
+//                Component.onCompleted: {
+//                    console.log(model.path + "/epg.xml");
+//                }
             }
         }
     }

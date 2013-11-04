@@ -36,7 +36,7 @@ FocusScope {
 
     DirectoryModel {
         id: channels
-        path: "epgdata/channels"
+        path: "qml/UbuntuTV/epgdata/channels"
     }
 
     Item {

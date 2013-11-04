@@ -20,3 +20,5 @@ build-TwoListView-Desktop_Qt_5_1_1_MinGW_32bit-Debug
 /build-tv_002-Desktop_Qt_5_1_1_MinGW_32bit-Debug
 
 /tv_002/tv_002.pro.user
+
+*.user

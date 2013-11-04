@@ -5,6 +5,9 @@ folder_01.target = qml
 folder_02.source = qml/common
 folder_02.target = qml
 
+folder_03.source = qml/UbuntuTV/epgdata
+folder_03.target = epgdata
+
 DEPLOYMENTFOLDERS = folder_01 folder_02
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -27,6 +30,8 @@ HEADERS += \
     person.h \
     birthdayparty.h
 
+#LIBS += -l$$quote("C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib/Gdi32")
+#LIBS += -l"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\Gdi32"
 # Installation path
 # target.path =
 
