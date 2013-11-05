@@ -29,70 +29,70 @@ Item {
     property variant end
     property real hoursPerStep: 0.5
     property int hourSize
-    property int stepsInScreen: Math.floor(width / steps.unit)
+//    property int stepsInScreen: Math.floor(width / steps.unit)
     property variant currentTime: currentTimeInTimeline()
 
     property real contentWidth
     property real contentX
 
-    Image {
-        id: previousArrow
-        property bool shown: contentX > 0
-        source: "artwork/left_arrow_timeline.png"
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        opacity: shown ? 1.0 : 0.0
-    }
+//    Image {
+//        id: previousArrow
+//        property bool shown: contentX > 0
+//        source: "artwork/left_arrow_timeline.png"
+//        anchors.left: parent.left
+//        anchors.verticalCenter: parent.verticalCenter
+//        opacity: shown ? 1.0 : 0.0
+//    }
 
-    Item {
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: previousArrow.right
-        anchors.right: nextArrow.left
-        clip: true
+//    Item {
+//        anchors.top: parent.top
+//        anchors.bottom: parent.bottom
+//        anchors.left: previousArrow.right
+//        anchors.right: nextArrow.left
+//        clip: true
 
-        Flickable {
-            anchors.fill: parent
-            anchors.leftMargin: previousArrow.show ? - previousArrow.paintedWidth : 0
-            anchors.rightMargin: nextArrow.shown ? - nextArrow.paintedWidth : 0
+//        Flickable {
+//            anchors.fill: parent
+//            anchors.leftMargin: previousArrow.show ? - previousArrow.paintedWidth : 0
+//            anchors.rightMargin: nextArrow.shown ? - nextArrow.paintedWidth : 0
 
-            contentWidth: timeline.contentWidth
-            contentX: timeline.contentX
-            clip: true
+//            contentWidth: timeline.contentWidth
+//            contentX: timeline.contentX
+//            clip: true
 
-            Repeater {
-                id: steps
-                property int unit: timeline.hourSize * timeline.hoursPerStep
-                property int total: Math.ceil((timeline.end - timeline.start) /
-                                              Utils.MS_PER_HOUR / timeline.hoursPerStep)
-                model: steps.total
-                delegate: TextCustom {
-                    anchors.top: (parent) ? parent.top : undefined
-                    anchors.bottom: (parent) ? parent.bottom : undefined
-                    x: index * steps.unit + Units.tvPx(23)
+//            Repeater {
+//                id: steps
+//                property int unit: timeline.hourSize * timeline.hoursPerStep
+//                property int total: Math.ceil((timeline.end - timeline.start) /
+//                                              Utils.MS_PER_HOUR / timeline.hoursPerStep)
+//                model: steps.total
+//                delegate: TextCustom {
+//                    anchors.top: (parent) ? parent.top : undefined
+//                    anchors.bottom: (parent) ? parent.bottom : undefined
+//                    x: index * steps.unit + Units.tvPx(23)
 
-                    verticalAlignment: Text.AlignVCenter
-                    fontSize: "small"
-                    text: {
-                        if (!timeline.start) return ""
-                        var timestamp = new Date(timeline.start.getTime() +
-                                                 index * Utils.MS_PER_HOUR * timeline.hoursPerStep)
-                        return Utils.pad(String(timestamp.getHours()), 2, "0") + ":" +
-                               Utils.pad(String(timestamp.getMinutes()), 2, "0")
-                    }
-                }
-            }
-        }
-    }
+//                    verticalAlignment: Text.AlignVCenter
+//                    fontSize: "small"
+//                    text: {
+//                        if (!timeline.start) return ""
+//                        var timestamp = new Date(timeline.start.getTime() +
+//                                                 index * Utils.MS_PER_HOUR * timeline.hoursPerStep)
+//                        return Utils.pad(String(timestamp.getHours()), 2, "0") + ":" +
+//                               Utils.pad(String(timestamp.getMinutes()), 2, "0")
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-    Image {
-        id: nextArrow
-        property bool shown: contentX + timeline.width < contentWidth
-        source: "artwork/right_arrow_timeline.png"
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        opacity: shown ? 1.0 : 0.0
-    }
+//    Image {
+//        id: nextArrow
+//        property bool shown: contentX + timeline.width < contentWidth
+//        source: "artwork/right_arrow_timeline.png"
+//        anchors.right: parent.right
+//        anchors.verticalCenter: parent.verticalCenter
+//        opacity: shown ? 1.0 : 0.0
+//    }
 
     /* Update the current time once per minute.
        FIXME: I don't think it's a big deal for now if it doesn't update at the

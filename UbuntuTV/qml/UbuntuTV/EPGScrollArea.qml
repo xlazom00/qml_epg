@@ -6,6 +6,7 @@ import "../common/utils.js" as Utils
 import "renderTypes"
 
 Flickable {
+//Item {
     id: area
 
     property variant startOfTimeline
@@ -28,6 +29,9 @@ Flickable {
 
     contentWidth: hourSize * (area.endOfTimeline - area.startOfTimeline) / Utils.MS_PER_HOUR
     contentHeight: channels.count * channelHeight
+//    width: hourSize * (area.endOfTimeline - area.startOfTimeline) / Utils.MS_PER_HOUR
+//    height: channels.count * channelHeight
+
     clip: true
 
     /* FIXME: this is an hack. We should check when all channels have loaded and do this at that time */
@@ -42,6 +46,7 @@ Flickable {
                 selectedChannelItem.selectedBroadcast = itemAtTime
                 var newContentX = hourSize * (currentTime - startOfTimeline) / Utils.MS_PER_HOUR - area.width / 2
                 contentX = newContentX
+//                anchors.leftMargin = newContentX
 
                 // New reference time can't be calculated in the usual way because we're jumping in the middle of a broadcast
                 // and the usual calculation assumes we just scrolled there normally
@@ -50,6 +55,9 @@ Flickable {
             }
         }
     }
+
+//    Behavior on anchors.leftMargin { NumberAnimation { easing.type: Easing.OutQuad; duration: 200 } }
+//    Behavior on anchors.topMargin { NumberAnimation { easing.type: Easing.OutQuad; duration: 200 } }
 
     Behavior on contentX { NumberAnimation { easing.type: Easing.OutQuad; duration: 200 } }
     Behavior on contentY { NumberAnimation { easing.type: Easing.OutQuad; duration: 200 } }
@@ -163,6 +171,7 @@ Flickable {
                 height: area.channelHeight
                 hourSize: area.hourSize
 
+//                scrollPosition: area.anchors.leftMargin
                 scrollPosition: area.contentX
                 viewportWidth: area.width
 

@@ -23,6 +23,11 @@ import "../../common/utils.js" as Utils
 import "../../common/units.js" as Units
 import "../"
 Item {
+
+    function logThis( something){
+        console.log(Qt.formatTime(new Date(), "hh:mm:ss:zzz ") + something);
+    }
+
     id: channel
     property alias dataSource: schedule.source
 
@@ -136,6 +141,9 @@ Item {
                 z: broadcasts.count - index
                 parentChannelItem: channel
 
+//                visible: (((x+ width) > (channel.scrollPosition+channel.viewportWidth)) && ((x + width) < channel.scrollPosition +  channel.viewportWidth))
+                visible : isVisibleA(x, width, channel.scrollPosition, channel.viewportWidth);
+
                 title: model.title
                 textMargin: Units.tvPx(15)
 
@@ -147,7 +155,24 @@ Item {
                 isOffAir: model.isOffAir
 
                 isSelected: isOnSelectedChannel && index == selectedBroadcast
-                onIsSelectedChanged: if (isSelected && selectionTracker) selectionTracker.follow = broadcast
+                onIsSelectedChanged: {
+                    if (isSelected && selectionTracker) {
+                        selectionTracker.follow = broadcast
+//                        console.log(x + "," + y + " " + parent.width+ " " + parent.height + " " + channel.width + " " + broadcastsContainer.width);
+//                        console.log(x + "," + y + " " + width  + " " + channel.viewportWidth + " " + channel.scrollPosition);
+                    }
+                }
+                function isVisibleA( itemX, itemWidth, areaX, areaWidth ) {
+                    if((itemX > (areaX + areaWidth)) && ((itemX+itemWidth)  > (areaX + areaWidth))) {
+//                        logThis(false);
+                        return false;
+                    }
+                    if( ( itemX < areaX ) && ((itemX+itemWidth)  < (areaX ))) {
+//                        logThis(false);
+                        return false;
+                    }
+                    return true;
+                }
             }
         }
     }
