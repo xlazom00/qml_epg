@@ -13,4 +13,9 @@ Flickable {
 
 //    contentWidth: hourSize * (area.endOfTimeline - area.startOfTimeline) / Utils.MS_PER_HOUR
 //    contentHeight: channels.count * channelHeight
+    Row{
+        Item {
+            width:
+        }
+    }
 }

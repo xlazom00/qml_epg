@@ -1,7 +1,9 @@
 import QtQuick 2.0
 
 Item {
-    anchors.fill: parent
+    anchors.left: parent.left
+    anchors.right: parent.right
+
 
 
 
