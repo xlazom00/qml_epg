@@ -76,7 +76,7 @@ Item {
         fontSize: "small"
         text: title
 
-        style: Text.Raised
+//        style: Text.Raised
         styleColor: "#1e1e1e"
 //        color: "#1e1e1e"
     }

@@ -19,6 +19,8 @@ QML_IMPORT_PATH =
 # MOBILITY +=
 QT += declarative
 
+CONFIG+=qml_debug
+
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     directorymodel.cpp \

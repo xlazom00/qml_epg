@@ -18,6 +18,8 @@
 
 Qt.include("units.js")
 
+//var unity2dConfigurationformFactor = "tv"
+
 function fontSizeToPixels(size) {
     if (unity2dConfigurationformFactor === "desktop") {
         switch (size) {
@@ -27,7 +29,7 @@ function fontSizeToPixels(size) {
             case "x-large": return dtPx(20)
             case "xx-large": return dtPx(30)
         }
-    } else if (unity2dConfiguration.formFactor === "tv") {
+    } else if (unity2dConfigurationformFactor === "tv") {
         switch (size) {
             case "ex-small": return 12
             case "small": return tvPx(30)
@@ -37,7 +39,7 @@ function fontSizeToPixels(size) {
             case "xx-large": return tvPx(60)
             case "xxx-large": return tvPx(90)
         }
-    } else if (unity2dConfiguration.formFactor === "tablet") {
+    } else if (unity2dConfigurationformFactor === "tablet") {
             switch (size) {
                 case "small": return dtPx(13)
                 case "medium": return dtPx(15)

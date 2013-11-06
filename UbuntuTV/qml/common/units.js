@@ -22,7 +22,7 @@ var desktopPixelDensity = 112
 var tvDistanceToDisplay = 2.0
 var tvPixelDensity = 52 // 1080p on a 42" screen
 
-var unity2dConfigurationformFactor = "desktop"
+var unity2dConfigurationformFactor = "tv"
 
 /* distanceToDisplay and pixelDensity cannot be global javascript variables
    because they would not be able to access unity2dConfiguration.formFactor
