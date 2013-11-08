@@ -92,8 +92,8 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
         QModelIndex modelIndex(this->index(rowIndex, column));
         QVariant res = data(modelIndex);
 //        QVariant data = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
-        qDebug() << "val:" << it.value() << " column:" << column  << " column" << modelIndex.column() << " row:" << modelIndex.row();
-        qDebug() << res;
+//        qDebug() << "val:" << it.value() << " column:" << column  << " column" << modelIndex.column() << " row:" << modelIndex.row();
+//        qDebug() << res;
         p->value = v8engine->fromVariant(res);
         ++it;
     }
