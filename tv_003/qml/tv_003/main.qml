@@ -9,6 +9,7 @@ Item {
     width: 1280
     height: 720
 
+    property int start : 1381212000
 //    property int currentStartIndex : 0
 //    property int currentEndIndex : 0
 
@@ -105,12 +106,44 @@ Item {
         EPG {
             focus: true
             width: parent.width
-            height: 100
-//            anchors.left: parent.left
-//            anchors.right: parent.right
+            height: 50
             id : epg
+            startOfDataTimeInt : root.start
+            endOfDataTimeInt: root.start
+            channelModel : epgModel[0].streammodel
+        }
+
+        EPG {
+            focus: true
+            width: parent.width
+            height: 50
+            contentX: epg.contentX
+            startOfDataTimeInt : root.start
+            endOfDataTimeInt: root.start
+            channelModel : epgModel[1].streammodel
+        }
+
+        EPG {
+            focus: true
+            width: parent.width
+            height: 50
+            contentX: epg.contentX
+            startOfDataTimeInt : root.start
+            endOfDataTimeInt: root.start
+            channelModel : epgModel[2].streammodel
+        }
+
+        EPG {
+            focus: true
+            width: parent.width
+            height: 50
+            contentX: epg.contentX
+            startOfDataTimeInt : root.start
+            endOfDataTimeInt: root.start
             channelModel : epgModel[3].streammodel
         }
+
+
     }
 
 

@@ -33,7 +33,8 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
-    qml/tv_003/Channel.qml
+    qml/tv_003/Channel.qml \
+    TODO.txt
 
 HEADERS += \
     qlsqltablemodel.h \

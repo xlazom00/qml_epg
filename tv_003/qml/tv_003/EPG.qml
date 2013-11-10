@@ -6,17 +6,17 @@ Flickable {
     id : area
     clip : true;
 
-    property int startOfDataTimeInt : 1381212000
-    property int endOfDataTimeInt : 1381212000
+    property int startOfDataTimeInt
+    property int endOfDataTimeInt
 
     property real startOfDataTime : -1
     property real endOfDataTime : -1
 
     property bool started : false
 
-//    property real endOfTime : area.contentX + area.width
-
     property variant channelModel;
+
+    flickableDirection : Flickable.HorizontalFlick
 
     onAtXEndChanged: {
         Utils.logThis("atXEnd:" + atXEnd);
@@ -35,13 +35,10 @@ Flickable {
         started = true;
     }
 
-//    flickableDirection: Flickable.HorizontalFlick
-//    boundsBehavior: Flickable.DragOverBounds
-
     contentWidth: 100;
-    contentHeight: 100;
+    contentHeight: area.height;
     contentX: -1;
-    leftMargin: 49800
+    leftMargin: 0
 
 //    contentWidth: hourSize * (area.endOfTimeline - area.startOfTimeline) / Utils.MS_PER_HOUR
 //    contentHeight: channels.count * channelHeight
@@ -57,13 +54,13 @@ Flickable {
         var newEndOfDataTime = area.endOfDataTime;
         var newStartOfDataTime = area.startOfDataTime;
         for(var i=startIndex; i < (startIndex + count); ++i){
-            Utils.logThis("-------------------------------------------------------------------------------");
-            Utils.logThis("-------------------------------------------------------------------------------");
-            Utils.logThis(" " + i);
+//            Utils.logThis("-------------------------------------------------------------------------------");
+//            Utils.logThis("-------------------------------------------------------------------------------");
+//            Utils.logThis(" " + i);
             var channelEvent = channelModel.get(i);
 
 
-            Utils.logThis(channelEvent.title + " " + channelEvent.startime + " dur:" + channelEvent.duration);
+//            Utils.logThis(channelEvent.title + " " + channelEvent.startime + " dur:" + channelEvent.duration);
 
                         var event = { 'title' : channelEvent.title,
                             'startTime' : Utils.computeTime(channelEvent.startime),
@@ -113,45 +110,6 @@ Flickable {
             area.contentX = newStartOfDataTime;
         }
     }
-
-
-//    onChannelModelChanged: {
-//        Utils.logThis("channelModel:" + channelModel + " count:" + channelModel.rowCount());
-////        Utils.logThis("modelIndex" + channelModel.modelIndex());
-////        loadData(0,9);
-//    }
-
-//    onContentXChanged: {
-//        Utils.logThis("onContentXChanged:" + area.contentX + " contentWidth:" + area.contentWidth + " width:"+ area.width);
-//    }
-////    onStartOfTimeChanged: {
-////        Utils.logThis("onStartOfTimeChanged:" + startOfTime);
-////    }
-
-    onContentYChanged: {
-        Utils.logThis("onContentYChanged:" + area.contentY);
-    }
-
-//    Row {
-//        id: dataRepresenter
-//        Repeater {
-//            model: 3
-//            Rectangle {
-//                width: 100; height: 40
-//                border.width: 1
-//                color: "yellow"
-//            }
-//        }
-//    }
-
-//    Rectangle {
-//        width : 50
-//        height: 50
-//        color: "red"
-//    }
-
-//    Row {
-//        anchors.fill: parent
         Repeater {
             id : shower
             model: broadcasts;
@@ -159,7 +117,8 @@ Flickable {
                 Rectangle {
                     x : model.startTime * 1.0
                     width: model.duration; height: 40
-                    border.width: 1
+                    border.width: 5
+                    border.color: "green"
                     color: "yellow"
 
                     Text {
@@ -167,16 +126,10 @@ Flickable {
                     }
                     Component.onCompleted: {
 //                        Utils.logThis("starttime:" + model.starttime + " area.width:" + area.width + " " + area.height + " " + " area.contentWidth:" + area.contentWidth + " " + area.contentHeight);
-                        Utils.logThis("starttime:" + model.startTime + " duration:" + model.duration);
+//                        Utils.logThis("starttime:" + model.startTime + " duration:" + model.duration);
 //                        Utils.logThis(area.contentItem.childrenRect);
                     }
                 }
-            Component.onCompleted: {
-                Utils.logThis("done");
-//                area.originX = area.startOfDataTime;
-//                area.contentItem.childrenRect.x =  area.startOfDataTime;
-//                area.leftMargin = -area.startOfDataTime;
-            }
         }
-//    }
+
 }
