@@ -31,8 +31,6 @@ int QLSqlTableModel::rowCount() const
 void QLSqlTableModel::setFilter(const QString &filter)
 {
     QSqlRelationalTableModel::setFilter(filter);
-//    bool ret = select();
-//    qDebug() << ret;
 }
 
 QVariant QLSqlTableModel::data ( const QModelIndex & index, int role ) const
@@ -68,8 +66,10 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
     // Must be called with a context and handle scope
 //    Q_D(const QQuickXmlListModel);
 
-    if (rowIndex < 0 || rowIndex >= rowCount())
+    if (rowIndex < 0 || rowIndex >= rowCount()){
+//        qDebug() << "rowCount:" << rowCount();
         return QQmlV4Handle(Encode::undefined());
+    }
 
 //    QQmlEngine *engine = qmlContext(this)->engine();
 //    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(engine);
@@ -82,6 +82,7 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
 //        Property *p = o->insertMember(name, PropertyAttributes());
 //        p->value = v8engine->fromVariant(d->data.value(ii).value(index));
 //    }
+
 
     QHash<int, QString>::const_iterator it = stringRoles.begin();
     while (it != stringRoles.end()) {
@@ -106,6 +107,7 @@ void QLSqlTableModel::generateRoleNames()
     roles.clear();
     stringRoles.clear();
     int nbCols = this->columnCount();
+//    qDebug() << "columns:" << nbCols;
     for (int i = 0; i < nbCols; i++) {
             roles[Qt::UserRole + i + 1] = QVariant(this->headerData(i, Qt::Horizontal).toString()).toByteArray();
             stringRoles[Qt::UserRole + i + 1] = this->headerData(i, Qt::Horizontal).toString();

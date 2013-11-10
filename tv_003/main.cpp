@@ -9,6 +9,7 @@
 #include "qtquick2applicationviewer.h"
 #include "qlsqltablemodel.h"
 #include "tvstream.h"
+#include "streamtablemodel.h"
 
 
 void CreateTables(QSqlDatabase & db)
@@ -48,11 +49,11 @@ void GenerateStreamModels(QQmlEngine * qmlEngine, QSqlDatabase & db,  QList< QOb
         QVariant data = streamModel->data(streamModel->index(rowIndex,0));
         QVariant name = streamModel->data(streamModel->index(rowIndex,1));
 //        qDebug() << data.toInt();
-        QLSqlTableModel * eventModel = new QLSqlTableModel(NULL, qmlEngine, db );
-        eventModel->setTable("event");
-        eventModel->generateRoleNames();
-        eventModel->setFilter(QString("streamid=%1").arg(data.toInt()));
-        eventModel->select();
+        StreamTableModel * eventModel = new StreamTableModel(NULL, qmlEngine, db, data.toInt() );
+//        eventModel->setTable("event");
+//        eventModel->generateRoleNames();
+//        eventModel->setFilter(QString("streamid=%1").arg(data.toInt()));
+//        eventModel->select();
 
 //        qDebug() << "name:" << name.toString() << ":" << eventModel->columnCount();
 //        QString filter = QString("streamid=%1").arg(data.toInt());
@@ -69,14 +70,12 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-
-    qmlRegisterType<QLSqlTableModel>();
+    qmlRegisterType<StreamTableModel>();
 
     QtQuick2ApplicationViewer viewer;
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("data\\app.sqlite");
-//    db.setDatabaseName("app.sqlite");
+    db.setDatabaseName("data/app.sqlite");
     bool ret = db.open();
     qDebug() << "db open" << ret;
 

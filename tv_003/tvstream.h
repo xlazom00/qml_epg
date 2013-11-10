@@ -5,7 +5,7 @@
 #include <QString>
 #include <QVariant>
 
-class QLSqlTableModel;
+class StreamTableModel;
 
 class TvStream : public QObject
 {
@@ -13,26 +13,24 @@ class TvStream : public QObject
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 //    Q_PROPERTY(QLSqlTableModel * streammodel READ streammodel WRITE setStreammodel)
-    Q_PROPERTY(QLSqlTableModel * streammodel READ streammodel CONSTANT)
+    Q_PROPERTY(StreamTableModel * streammodel READ streammodel CONSTANT)
 
 public:
     TvStream(QObject *parent=0);
-    TvStream(const QString & name, QLSqlTableModel * streamModel, QObject *parent=0);
+    TvStream(const QString & name, StreamTableModel * streamModel, QObject *parent=0);
     ~TvStream();
 public:
-    QLSqlTableModel * streammodel() const;
-//    void setStreammodel(QLSqlTableModel * model);
+    StreamTableModel * streammodel() const;
 
     QString name() const;
     void setName(const QString &name);
 
 signals:
     void nameChanged();
-//    void streammodelChanged();
 
 
 private:
-    QLSqlTableModel * m_StreamModel;
+    StreamTableModel * m_StreamModel;
     QString m_Name;
 };
 

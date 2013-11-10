@@ -9,8 +9,8 @@ Item {
     width: 1280
     height: 720
 
-    property int currentStartIndex : 60
-    property int currentEndIndex : 60
+//    property int currentStartIndex : 0
+//    property int currentEndIndex : 0
 
 //    property list<QtObject> epgModel : epgData;
     property variant epgModel : epgData;
@@ -38,22 +38,21 @@ Item {
             text : "540000"
         }
 
-        Button {
-            id : changeTime;
-            text : "add content befour"
-            onClicked: {
-                if(currentStartIndex > 0){
-                    epg.loadData(currentStartIndex-10, 10)
-                    currentStartIndex-=10;
-                }
-            }
-        }
+//        Button {
+//            id : changeTime;
+//            text : "add content befour"
+//            onClicked: {
+////                if(currentStartIndex > 0){
+////                    epg.loadData(currentStartIndex-10, 10)
+////                    currentStartIndex-=10;
+////                }
+//            }
+//        }
         Button {
             id : changeTime2;
-            text : "add content after"
+            text : "load next day"
             onClicked: {
-                epg.loadData(currentEndIndex, 10)
-                currentEndIndex+=10;
+                epg.loadNextDay()
             }
         }
 
@@ -95,6 +94,12 @@ Item {
 //            }
 //        }
 
+//        Rectangle {
+//            border.color: Black
+//            border.width: 2
+//            width: 400
+//            height: 10
+//        }
 
 
         EPG {
@@ -104,7 +109,7 @@ Item {
 //            anchors.left: parent.left
 //            anchors.right: parent.right
             id : epg
-            channelModel : epgModel[0].streammodel
+            channelModel : epgModel[3].streammodel
         }
     }
 

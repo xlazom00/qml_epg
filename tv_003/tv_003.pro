@@ -22,7 +22,8 @@ CONFIG+=qml_debug
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     qlsqltablemodel.cpp \
-    tvstream.cpp
+    tvstream.cpp \
+    streamtablemodel.cpp
 
 # Installation path
 # target.path =
@@ -36,4 +37,5 @@ OTHER_FILES += \
 
 HEADERS += \
     qlsqltablemodel.h \
-    tvstream.h
+    tvstream.h \
+    streamtablemodel.h

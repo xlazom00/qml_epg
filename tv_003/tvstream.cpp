@@ -1,13 +1,13 @@
 #include "tvstream.h"
 
-#include "qlsqltablemodel.h"
+#include "streamtablemodel.h"
 
 TvStream::TvStream(QObject *parent)
     : QObject(parent)
 {
 }
 
-TvStream::TvStream(const QString & name, QLSqlTableModel * streamModel, QObject *parent) :
+TvStream::TvStream(const QString & name, StreamTableModel * streamModel, QObject *parent) :
     QObject(parent), m_StreamModel(streamModel), m_Name(name)
 {
 }
@@ -17,7 +17,7 @@ TvStream::~TvStream()
     delete m_StreamModel;
 }
 
-QLSqlTableModel * TvStream::streammodel() const
+StreamTableModel * TvStream::streammodel() const
 {
     return m_StreamModel;
 //    return QVariant::fromValue(m_StreamModel);
@@ -35,12 +35,3 @@ void TvStream::setName(const QString &name)
         emit nameChanged();
     }
 }
-
-
-//void TvStream::setStreammodel(QLSqlTableModel * model)
-//{
-////    if (model != m_StreamModel) {
-////        m_StreamModel = (QLSqlTableModel * )model;
-////        emit streammodelChanged();
-////    }
-//}
