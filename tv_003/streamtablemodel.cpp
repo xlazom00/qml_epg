@@ -23,9 +23,7 @@ void StreamTableModel::setFrom(int startTime, int duration )
     if(!ret){
         qDebug() << "select failed";
     }
-
 }
-
 
 QDateTime StreamTableModel::toDate(int time)
 {

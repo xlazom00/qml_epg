@@ -1,3 +1,11 @@
-1.visibility of broadcast items
+
+EPG
+1.broadcast items visiblity
 2.preloading data
 3.visibility of broadcast streams
+4.caching items
+
+epg data update (db file)
+1. file update daemon
+2. dbus notification about new epg data available
+3. qml db connection with reconnect to sqlite file

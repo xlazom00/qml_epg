@@ -4,35 +4,30 @@
 #include <QSqlRelationalTableModel>
 #include <QSqlRecord>
 #include <QDebug>
-
 #include <qqmlcontext.h>
+
 #include <private/qqmlengine_p.h>
 #include <private/qv8engine_p.h>
 #include <private/qv4value_p.h>
 #include <private/qv4engine_p.h>
 #include <private/qv4object_p.h>
 
-#include "qlsqltablemodel.h"
+#include "sqltablemodel2.h"
 
 using namespace QV4;
 using namespace QtQml;
 
-QLSqlTableModel::QLSqlTableModel(QObject *parent, QQmlEngine * qmlEngine, QSqlDatabase db )
-    : QSqlRelationalTableModel(parent, db), m_QmlEngine(qmlEngine)
+SqlTableModel2::SqlTableModel2(QObject *parent, QSqlDatabase db )
+    : QSqlRelationalTableModel(parent, db)
 {
 }
 
-int QLSqlTableModel::rowCount() const
+int SqlTableModel2::rowCount() const
 {
-    return QSqlTableModel::rowCount();
+    return QSqlRelationalTableModel::rowCount();
 }
 
-void QLSqlTableModel::setFilter(const QString &filter)
-{
-    QSqlRelationalTableModel::setFilter(filter);
-}
-
-QVariant QLSqlTableModel::data ( const QModelIndex & index, int role ) const
+QVariant SqlTableModel2::data ( const QModelIndex & index, int role ) const
 {
 //    qDebug() << index.column() << " " << index.row();
     if(index.row() >= rowCount())
@@ -60,7 +55,7 @@ QVariant QLSqlTableModel::data ( const QModelIndex & index, int role ) const
     }
 }
 
-QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
+QQmlV4Handle SqlTableModel2::get(int rowIndex) const
 {
     // Must be called with a context and handle scope
 //    Q_D(const QQuickXmlListModel);
@@ -70,9 +65,9 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
         return QQmlV4Handle(Encode::undefined());
     }
 
-//    QQmlEngine *engine = qmlContext(this)->engine();
-//    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(engine);
-    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(m_QmlEngine);
+    QQmlEngine *engine = qmlContext(this)->engine();
+    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(engine);
+//    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(m_QmlEngine);
     ExecutionEngine *v4engine = QV8Engine::getV4(v8engine);
     Scope scope(v4engine);
     Scoped<Object> o(scope, v4engine->newObject());
@@ -101,7 +96,8 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
     return QQmlV4Handle(o);
 }
 
-void QLSqlTableModel::generateRoleNames()
+
+void SqlTableModel2::generateRoleNames()
 {
     roles.clear();
     stringRoles.clear();
@@ -111,7 +107,4 @@ void QLSqlTableModel::generateRoleNames()
             roles[Qt::UserRole + i + 1] = QVariant(this->headerData(i, Qt::Horizontal).toString()).toByteArray();
             stringRoles[Qt::UserRole + i + 1] = this->headerData(i, Qt::Horizontal).toString();
     }
-//#ifndef HAVE_QT5
-//    setRoleNames(roles);
-//#endif
 }

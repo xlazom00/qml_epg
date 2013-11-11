@@ -23,7 +23,10 @@ CONFIG+=qml_debug
 SOURCES += main.cpp \
     qlsqltablemodel.cpp \
     tvstream.cpp \
-    streamtablemodel.cpp
+    streamtablemodel.cpp \
+    epgdatabase.cpp \
+    sqltablemodel2.cpp \
+    streamtablemodel2.cpp
 
 # Installation path
 # target.path =
@@ -39,4 +42,7 @@ OTHER_FILES += \
 HEADERS += \
     qlsqltablemodel.h \
     tvstream.h \
-    streamtablemodel.h
+    streamtablemodel.h \
+    epgdatabase.h \
+    sqltablemodel2.h \
+    streamtablemodel2.h

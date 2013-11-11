@@ -2,12 +2,19 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 
+import EpgData 1.0
 import "utils.js" as Utils
 
 Item {
     id : root
     width: 1280
     height: 720
+
+
+    EPGDatabase {
+        id : db
+    }
+
 
     property int start : 1381212000
 //    property int currentStartIndex : 0
@@ -103,45 +110,45 @@ Item {
 //        }
 
 
-        EPG {
-            focus: true
-            width: parent.width
-            height: 50
-            id : epg
-            startOfDataTimeInt : root.start
-            endOfDataTimeInt: root.start
-            channelModel : epgModel[0].streammodel
-        }
+//        EPG {
+//            focus: true
+//            width: parent.width
+//            height: 50
+//            id : epg
+//            startOfDataTimeInt : root.start
+//            endOfDataTimeInt: root.start
+//            channelModel : epgModel[0].streammodel
+//        }
 
-        EPG {
-            focus: true
-            width: parent.width
-            height: 50
-            contentX: epg.contentX
-            startOfDataTimeInt : root.start
-            endOfDataTimeInt: root.start
-            channelModel : epgModel[1].streammodel
-        }
+//        EPG {
+//            focus: true
+//            width: parent.width
+//            height: 50
+//            contentX: epg.contentX
+//            startOfDataTimeInt : root.start
+//            endOfDataTimeInt: root.start
+//            channelModel : epgModel[1].streammodel
+//        }
 
-        EPG {
-            focus: true
-            width: parent.width
-            height: 50
-            contentX: epg.contentX
-            startOfDataTimeInt : root.start
-            endOfDataTimeInt: root.start
-            channelModel : epgModel[2].streammodel
-        }
+//        EPG {
+//            focus: true
+//            width: parent.width
+//            height: 50
+//            contentX: epg.contentX
+//            startOfDataTimeInt : root.start
+//            endOfDataTimeInt: root.start
+//            channelModel : epgModel[2].streammodel
+//        }
 
-        EPG {
-            focus: true
-            width: parent.width
-            height: 50
-            contentX: epg.contentX
-            startOfDataTimeInt : root.start
-            endOfDataTimeInt: root.start
-            channelModel : epgModel[3].streammodel
-        }
+//        EPG {
+//            focus: true
+//            width: parent.width
+//            height: 50
+//            contentX: epg.contentX
+//            startOfDataTimeInt : root.start
+//            endOfDataTimeInt: root.start
+//            channelModel : epgModel[3].streammodel
+//        }
 
 
     }
