@@ -5,6 +5,16 @@
 #include "streamtablemodel2.h"
 
 
+
+#include <qqmlcontext.h>
+
+#include <private/qqmlengine_p.h>
+#include <private/qv8engine_p.h>
+#include <private/qv4value_p.h>
+#include <private/qv4engine_p.h>
+#include <private/qv4object_p.h>
+
+
 EPGDatabase::EPGDatabase(QObject *parent) :
     QObject(parent), m_StreamModel(NULL)
 {
@@ -65,7 +75,7 @@ StreamTableModel2 * EPGDatabase::createStream(int id)
         return NULL;
     }
 
-    if(m_StreamModel->rowCount() >= id)
+    if(m_StreamModel->rowCount() < id)
     {
         return NULL;
     }
@@ -73,7 +83,8 @@ StreamTableModel2 * EPGDatabase::createStream(int id)
     QVariant data = m_StreamModel->data(m_StreamModel->index(id,0));
     QVariant name = m_StreamModel->data(m_StreamModel->index(id,1));
 
-    return new StreamTableModel2(this, m_Db, data.toInt());
+    StreamTableModel2 *  streamModel = new StreamTableModel2(this, m_Db, data.toInt());
+    return streamModel;
 }
 
 

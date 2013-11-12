@@ -12,7 +12,11 @@ Item {
 
 
     EPGDatabase {
-        id : db
+        id : db;
+        file: "data/app.sqlite";
+//        Component.onCompleted: {
+//            Utils.logThis("c" + db.streamCount());
+//        }
     }
 
 
@@ -21,7 +25,7 @@ Item {
 //    property int currentEndIndex : 0
 
 //    property list<QtObject> epgModel : epgData;
-    property variant epgModel : epgData;
+//    property variant epgModel : epgData;
 //    : someData
 
 //    property variant epgModel;
@@ -110,25 +114,25 @@ Item {
 //        }
 
 
-//        EPG {
-//            focus: true
-//            width: parent.width
-//            height: 50
-//            id : epg
-//            startOfDataTimeInt : root.start
-//            endOfDataTimeInt: root.start
-//            channelModel : epgModel[0].streammodel
-//        }
+        EPG {
+            focus: true
+            width: parent.width
+            height: 50
+            id : epg
+            startOfDataTimeInt : root.start
+            endOfDataTimeInt: root.start
+            streamModelData : db.createStream(0);
+        }
 
-//        EPG {
-//            focus: true
-//            width: parent.width
-//            height: 50
-//            contentX: epg.contentX
-//            startOfDataTimeInt : root.start
-//            endOfDataTimeInt: root.start
-//            channelModel : epgModel[1].streammodel
-//        }
+        EPG {
+            focus: true
+            width: parent.width
+            height: 50
+            contentX: epg.contentX
+            startOfDataTimeInt : root.start
+            endOfDataTimeInt: root.start
+            streamModelData : db.createStream(1);
+        }
 
 //        EPG {
 //            focus: true

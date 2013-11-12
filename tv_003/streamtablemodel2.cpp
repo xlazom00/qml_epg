@@ -1,3 +1,4 @@
+
 #include "streamtablemodel2.h"
 
 StreamTableModel2::StreamTableModel2(QObject * parent, QSqlDatabase db) :
@@ -21,4 +22,10 @@ void StreamTableModel2::setFrom(int startTime, int duration )
     if(!ret){
         qDebug() << "select failed";
     }
+}
+
+QDateTime StreamTableModel2::toDate(int time)
+{
+    qint64 timeMs = ((qint64)time * 1000ll);
+    return QDateTime::fromMSecsSinceEpoch(timeMs);
 }

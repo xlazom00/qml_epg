@@ -4,6 +4,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QDateTime>
 
 #include "sqltablemodel2.h"
 
@@ -15,6 +16,8 @@ public:
     StreamTableModel2(QObject *parent = 0,  QSqlDatabase db = QSqlDatabase());
 
     Q_INVOKABLE void setFrom(int startTime, int duration );
+
+    Q_INVOKABLE QDateTime toDate(int time);
 
 signals:
 

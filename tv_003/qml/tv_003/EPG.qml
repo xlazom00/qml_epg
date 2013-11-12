@@ -1,10 +1,12 @@
 import QtQuick 2.0
-
+import EpgData 1.0
 import "utils.js" as Utils
 
 Flickable {
     id : area
     clip : true;
+
+    property StreamTableModel2 streamModelData
 
     property int startOfDataTimeInt
     property int endOfDataTimeInt
@@ -14,7 +16,7 @@ Flickable {
 
     property bool started : false
 
-    property variant channelModel;
+//    property variant channelModel;
 
     flickableDirection : Flickable.HorizontalFlick
 
@@ -44,20 +46,20 @@ Flickable {
 //    contentHeight: channels.count * channelHeight
 
     function loadNextDay() {
-        channelModel.setFrom(endOfDataTimeInt, Utils.ONEDAYSECONDS);
-        loadData(0, channelModel.rowCount());
+        streamModelData.setFrom(endOfDataTimeInt, Utils.ONEDAYSECONDS);
+        loadData(0, streamModelData.rowCount());
         endOfDataTimeInt  = endOfDataTimeInt + Utils.ONEDAYSECONDS;
     }
 
     function loadData( startIndex, count){
-        channelModel.rowCount();
+//        channelModel.rowCount();
         var newEndOfDataTime = area.endOfDataTime;
         var newStartOfDataTime = area.startOfDataTime;
         for(var i=startIndex; i < (startIndex + count); ++i){
 //            Utils.logThis("-------------------------------------------------------------------------------");
 //            Utils.logThis("-------------------------------------------------------------------------------");
 //            Utils.logThis(" " + i);
-            var channelEvent = channelModel.get(i);
+            var channelEvent = streamModelData.get(i);
 
 
 //            Utils.logThis(channelEvent.title + " " + channelEvent.startime + " dur:" + channelEvent.duration);
@@ -79,7 +81,7 @@ Flickable {
 //                Utils.logThis("area.contentWidth:" + area.contentWidth + " event.starttime:" + event.starttime + " event.duration:" + event.duration);
 //            }
 
-//            Utils.logThis("starttime:" + event.starttime);
+//            Utils.logThis("startTimeInt:" + event.startTimeInt);
 
             if((newEndOfDataTime < 0) || (event.startTime + event.duration > newEndOfDataTime)) {
                 newEndOfDataTime = event.startTime + event.duration;
@@ -122,7 +124,7 @@ Flickable {
                     color: "yellow"
 
                     Text {
-                        text: model.title +"\n"+ Qt.formatTime(channelModel.toDate(model.startTimeInt), "hh:mm:ss");
+                        text: model.title +"\n"+ Qt.formatTime(streamModelData.toDate(model.startTimeInt), "hh:mm:ss");
                     }
                     Component.onCompleted: {
 //                        Utils.logThis("starttime:" + model.starttime + " area.width:" + area.width + " " + area.height + " " + " area.contentWidth:" + area.contentWidth + " " + area.contentHeight);

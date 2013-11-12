@@ -57,6 +57,7 @@ QVariant SqlTableModel2::data ( const QModelIndex & index, int role ) const
 
 QQmlV4Handle SqlTableModel2::get(int rowIndex) const
 {
+
     // Must be called with a context and handle scope
 //    Q_D(const QQuickXmlListModel);
 
@@ -65,7 +66,30 @@ QQmlV4Handle SqlTableModel2::get(int rowIndex) const
         return QQmlV4Handle(Encode::undefined());
     }
 
-    QQmlEngine *engine = qmlContext(this)->engine();
+
+
+//    {
+//        QObjectPrivate *priv = QObjectPrivate::get(const_cast<QObject *>(this->parent()));
+
+//        QQmlData *data =
+//            static_cast<QQmlData *>(priv->declarativeData);
+
+//        if (!data){
+//             Q_ASSERT(false);
+//        }
+//        else if (data->outerContext) {
+//            QQmlContext * context =  data->outerContext->asQQmlContext();
+//        }
+//        else {
+//            Q_ASSERT(false);
+//        }
+//    }
+
+//    QtQml::qmlContext()
+//    QQmlContext * context =  qmlContext(this);
+//    Q_ASSERT(context != NULL);
+
+    QQmlEngine *engine = qmlContext(this->parent())->engine();
     QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(engine);
 //    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(m_QmlEngine);
     ExecutionEngine *v4engine = QV8Engine::getV4(v8engine);
