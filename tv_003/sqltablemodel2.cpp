@@ -59,6 +59,8 @@ QQmlV4Handle SqlTableModel2::get(int rowIndex) const
 {
 
     // Must be called with a context and handle scope
+//    Q_D(const SqlTableModel2);
+    // Must be called with a context and handle scope
 //    Q_D(const QQuickXmlListModel);
 
     if (rowIndex < 0 || rowIndex >= rowCount()){
@@ -90,9 +92,10 @@ QQmlV4Handle SqlTableModel2::get(int rowIndex) const
 //    Q_ASSERT(context != NULL);
 
     QQmlEngine *engine = qmlContext(this->parent())->engine();
+//    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(engine);
+    QV4::ExecutionEngine *v4engine = QQmlEnginePrivate::getV4Engine(engine);
     QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(engine);
-//    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(m_QmlEngine);
-    ExecutionEngine *v4engine = QV8Engine::getV4(v8engine);
+//    ExecutionEngine *v4engine = QV8Engine::getV4(v8engine);
     Scope scope(v4engine);
     Scoped<Object> o(scope, v4engine->newObject());
 //    for (int ii = 0; ii < d->roleObjects.count(); ++ii) {
@@ -101,11 +104,12 @@ QQmlV4Handle SqlTableModel2::get(int rowIndex) const
 //        p->value = v8engine->fromVariant(d->data.value(ii).value(index));
 //    }
 
-
+    ScopedString name(scope);
+    ScopedValue value(scope);
     QHash<int, QString>::const_iterator it = stringRoles.begin();
     while (it != stringRoles.end()) {
-        ScopedString name(scope, v4engine->newIdentifier(it.value()));
-        Property *p = o->insertMember(name, PropertyAttributes());
+        name = v4engine->newIdentifier(it.value());
+//        Property *p = o->insertMember(name, PropertyAttributes());
 
         int column(it.key() - Qt::UserRole - 1);
         QModelIndex modelIndex(this->index(rowIndex, column));
@@ -113,7 +117,9 @@ QQmlV4Handle SqlTableModel2::get(int rowIndex) const
 //        QVariant data = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
 //        qDebug() << "val:" << it.value() << " column:" << column  << " column" << modelIndex.column() << " row:" << modelIndex.row();
 //        qDebug() << res;
-        p->value = v8engine->fromVariant(res);
+
+        value = v8engine->fromVariant(res);
+        o->insertMember(name, value);
         ++it;
     }
 

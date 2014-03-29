@@ -70,10 +70,11 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
         return QQmlV4Handle(Encode::undefined());
     }
 
+    QQmlEngine *engine = qmlContext(this)->engine();
 //    QQmlEngine *engine = qmlContext(this)->engine();
 //    QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(engine);
     QV8Engine *v8engine = QQmlEnginePrivate::getV8Engine(m_QmlEngine);
-    ExecutionEngine *v4engine = QV8Engine::getV4(v8engine);
+    ExecutionEngine *v4engine = QQmlEnginePrivate::getV4Engine(m_QmlEngine);
     Scope scope(v4engine);
     Scoped<Object> o(scope, v4engine->newObject());
 //    for (int ii = 0; ii < d->roleObjects.count(); ++ii) {
@@ -84,9 +85,10 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
 
 
     QHash<int, QString>::const_iterator it = stringRoles.begin();
+    ScopedValue value(scope);
     while (it != stringRoles.end()) {
         ScopedString name(scope, v4engine->newIdentifier(it.value()));
-        Property *p = o->insertMember(name, PropertyAttributes());
+//        Property *p = o->insertMember(name, PropertyAttributes());
 
         int column(it.key() - Qt::UserRole - 1);
         QModelIndex modelIndex(this->index(rowIndex, column));
@@ -94,7 +96,9 @@ QQmlV4Handle QLSqlTableModel::get(int rowIndex) const
 //        QVariant data = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
 //        qDebug() << "val:" << it.value() << " column:" << column  << " column" << modelIndex.column() << " row:" << modelIndex.row();
 //        qDebug() << res;
-        p->value = v8engine->fromVariant(res);
+        value = v8engine->fromVariant(res);
+        o->insertMember(name, value);
+
         ++it;
     }
 
